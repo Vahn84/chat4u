@@ -1,0 +1,24 @@
+<ion-view view-title="{{contact.name}}">
+  <ion-content>
+    <ion-list>
+      <ion-item ng-repeat="message in messages track by $index" href="">
+	   
+        {{contact.name}}
+		{{message}}
+      </ion-item>
+    </ion-list>
+
+  </ion-content>
+  
+  
+    <form name="sendMessageForm" ng-submit="sendMessage()" novalidate>
+              <ion-footer-bar class="bar-stable item-input-inset message-footer" keyboard-attach>
+                  <label class="item-input-wrapper">
+                      <textarea style="width:100%;" ng-model="input.message" value="" placeholder="Send {{contact.name}} a message..." required minlength="1" maxlength="1500" ></textarea>
+                  </label>
+                  <div class="footer-btn-wrap">
+                    <button class="button button-icon icon ion-android-send footer-btn" type="submit">   </button>
+                  </div>
+              </ion-footer-bar>
+          </form>
+</ion-view>

@@ -1,10 +1,17 @@
-<ion-view view-title="{{contact.name}}">
+<ion-view view-title="{{contact.name}}" class="light-grey-bg" id="chat_detail">
   <ion-content>
     <ion-list>
-      <ion-item ng-repeat="message in messages track by $index" href="">
-	   
-        {{contact.name}}
-		{{message}}
+      <ion-item ng-repeat="chat in getChatMessages() track by $index" href="">
+		<div class="">
+        <img class="profile-pic" ng-class="(isOwnMessage(chat.jid)) ? 'pull-right' : 'pull-left'" 
+		ng-src="{{(isOwnMessage(chat.jid)) ? myContact.face : contact.face}}"/>
+		<p class="chat_message" ng-class="(isOwnMessage(chat.jid)) ? 'pull-right text-right' : 'pull-left text-left'" >{{chat.text}}<br>
+		<small>{{isOwnMessage(chat.jid) == true && myContact.name || contact.name}}</small>
+		</p>
+		<div class="clearfix"></div>
+		
+		
+		</div>
       </ion-item>
     </ion-list>
 
@@ -14,7 +21,7 @@
     <form name="sendMessageForm" ng-submit="sendMessage()" novalidate>
               <ion-footer-bar class="bar-stable item-input-inset message-footer" keyboard-attach>
                   <label class="item-input-wrapper">
-                      <textarea style="width:100%;" ng-model="input.message" value="" placeholder="Send {{contact.name}} a message..." required minlength="1" maxlength="1500" ></textarea>
+                      <textarea style="width:100%; background:none;" ng-model="input.message" value="" placeholder="Send {{contact.name}} a message..." required minlength="1" maxlength="1500" ng-keypress="input.sendTyping()"></textarea>
                   </label>
                   <div class="footer-btn-wrap">
                     <button class="button button-icon icon ion-android-send footer-btn" type="submit">   </button>

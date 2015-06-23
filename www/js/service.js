@@ -1,6 +1,6 @@
 angular
     .module('starter.services', [])
-    .service('xmpp', function($rootScope, $state,  $ionicScrollDelegate) {
+    .service('xmpp', function($rootScope, $state,  $ionicScrollDelegate, $window) {
  
         return {
  
@@ -9,6 +9,8 @@ angular
               
  
                 connect = new Strophe.Connection('http://bosh.metajack.im:5280/xmpp-httpbind/');
+				
+				
  
                 connect.connect(jid, pwd, function(status) {
  
@@ -34,18 +36,25 @@ angular
                     }
 					
 					else if (status === Strophe.Status.CONNECTED) {
+						connect.addNameSpace
+						
                         console.log("CONNECTED");
+						
 						 //add "Hooks", or Listeners if you will
-                        
+                        if( $window.localStorage['jid']==null)
+						$window.localStorage['jid'] = jid;
+						$rootScope.myJID = $window.localStorage['jid'];
                         connect.addHandler(on_presence, null, "presence");
                         connect.addHandler(on_message, null, "message", "chat");
+                        connect.addHandler(_notificationReceived, null, "message", "chat");
+						
  
                         connect.send($pres());
 						
                         $state.go('app.contacts-list');
                     }
 			
-                });
+                })	;
  
                 // "Hooks"
  
@@ -56,23 +65,35 @@ angular
                         return true
  
                     } // end of presence
+					
+					
+					function _notificationReceived(message) {
+ 
+                        // handle presence
+						console.log("received");	
+                        return true
+ 
+                    } // end of presence
+ 
  
                 function on_message(message) {
 					var to = message.getAttribute('to');
 					var from = message.getAttribute('from');
 					var type = message.getAttribute('type');
 					var elems = message.getElementsByTagName('body');
-
+					var clientJid = Strophe.getBareJidFromJid(from); 
 					if (type == "chat" && elems.length > 0) {
 					var body = elems[0];
 					
 					var text = Strophe.getText(body);
 					
 					 console.log("E' arrivato un messaggio da: "+from+"/n"+"Testo: "+text	);
-					 
+					 var array = {};
+					 array.jid = clientJid;
+					 array.text = text;
 					 $rootScope.$apply(function() {
-						
-						$rootScope.messages.push(text);
+						$rootScope.messages[clientJid].push(array);
+					
 						$ionicScrollDelegate.scrollBottom(true);
 					  });
 					 
@@ -89,7 +110,9 @@ angular
  
     })
 	
-	.factory('Chats', function() {
+	
+	
+	.factory('Chats', function($rootScope) {
   // Might use a resource here that returns a JSON array
 
   // Some fake testing data
@@ -115,6 +138,17 @@ angular
     get: function(chatId) {
       for (var i = 0; i < chats.length; i++) {
         if (chats[i].id === parseInt(chatId)) {
+			var contactJid = chats[i].jid;	
+			$rootScope.messages[contactJid] = [];
+          return chats[i];
+        }
+      }
+      return null;
+    },
+	
+	 getByJID: function(jid) {
+      for (var i = 0; i < chats.length; i++) {
+        if (chats[i].jid === jid) {
           return chats[i];
         }
       }

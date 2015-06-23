@@ -6,9 +6,11 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
 
-.run(function($ionicPlatform, $rootScope) {
+.run(function($ionicPlatform, $rootScope, $window) {
 	
-	 $rootScope.messages = ['Wow, this is really something huh?', 'for sure']; 
+	 $rootScope.messages = {}; 
+	 ( $window.localStorage['jid']!=null) ?  $rootScope.myJID = $window.localStorage['jid']: $rootScope.myJID = ""; 
+	 
 	
   $ionicPlatform.ready(function() {
 	  

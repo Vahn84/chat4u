@@ -9,6 +9,7 @@ angular.module('starter.controllers', [])
   //$scope.$on('$ionicView.enter', function(e) {
   //});
   
+ 
   // Form data for the login modal
   $scope.loginData = {};
 
@@ -20,7 +21,8 @@ angular.module('starter.controllers', [])
 
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
-	  
+	$scope.loginData.username ="vahn@chatme.im";
+	$scope.loginData.password = "nevermind";
 	xmpp.auth($scope.loginData.username, $scope.loginData.password, null, null);  
     console.log('Doing login', $scope.loginData);
 
@@ -42,16 +44,53 @@ angular.module('starter.controllers', [])
 	  }
 })
 
-.controller('ChatDetailsCtrl', function($scope, $rootScope, $stateParams, Chats) {
+.controller('ChatDetailsCtrl', function($scope, $rootScope, $stateParams, Chats, $ionicScrollDelegate, filterFilter) {
 	 $scope.contact = Chats.get($stateParams.contactId);
 	 $scope.input = {};
+	 $scope.chat = {};
+	 var myJID = $rootScope.myJID;
+	 
+	 $scope.myContact = Chats.getByJID(myJID);
+
+	 var contactJid = $scope.contact.jid;
+	 
+	$scope.getChatMessages = function (){
 		
+		$scope.chat = $rootScope.messages[contactJid];
+		
+		return $scope.chat;
+	}
+	
+	$scope.isOwnMessage = function(jid){
+		
+		return (jid==myJID) ? true : false;
+	}	
+		
+		$scope.input.sendTyping = function () {
+			
+			connect.chatstates.sendComposing($scope.contact.jid, 'chat');
+			console.log("typing");
+		}
+	 
 	 
 	   $scope.sendMessage = function() {
-
-			  var sendMessageQuery = $msg({to: $scope.contact.jid, type: 'chat'}).c('body').t($scope.input.message);
-			 connect.send(sendMessageQuery);
-	 
+			
+			if($scope.input.message.length){
+				
+					var sendMessageQuery = $msg({to: $scope.contact.jid, type: 'chat'}).c('body').t($scope.input.message);
+					connect.send(sendMessageQuery);
+					
+					var message_text = $scope.input.message;
+					var array = {};
+					
+					array.jid = myJID;
+					array.text = message_text;
+					
+					$rootScope.messages[contactJid].push(array);
+					$ionicScrollDelegate.scrollBottom(true);
+						
+					$scope.input.message="";
+			}
 		
 	   }
 	 

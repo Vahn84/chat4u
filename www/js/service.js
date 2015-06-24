@@ -36,7 +36,7 @@ angular
                     }
 					
 					else if (status === Strophe.Status.CONNECTED) {
-						connect.addNameSpace
+					
 						
                         console.log("CONNECTED");
 						
@@ -46,12 +46,14 @@ angular
 						$rootScope.myJID = $window.localStorage['jid'];
                         connect.addHandler(on_presence, null, "presence");
                         connect.addHandler(on_message, null, "message", "chat");
-                        connect.addHandler(_notificationReceived, null, "message", "chat");
+                        
 						
  
                         connect.send($pres());
 						
                         $state.go('app.contacts-list');
+						connect.addHandler(_notificationReceived, null, "message", "chat");
+						
                     }
 			
                 })	;
@@ -68,15 +70,47 @@ angular
 					
 					
 					function _notificationReceived(message) {
- 
-                        // handle presence
-						console.log("received");	
+						var paused = message.getElementsByTagName('paused');
+						var composing = message.getElementsByTagName('composing');
+						
+						var from = message.getAttribute('from');
+						var clientJid = Strophe.getBareJidFromJid(from); 
+                   
+						
+						if(composing.length>0) {
+							console.log("composing");
+							
+							if(!$rootScope.messages.composing) {
+								
+									 var array = {};
+									 array.jid = clientJid;
+									 array.text = "Sto scrivendo...";
+									 array.text.composing = 1;
+									 $rootScope.$apply(function() {
+										$rootScope.messages[clientJid].push(array);
+										$ionicScrollDelegate.scrollBottom(true);
+									  });	
+								
+								$rootScope.messages.composing = true;
+							}
+						}
+						
+						else if(paused.length>0) {
+							console.log($rootScope.messages[clientJid].length);
+							console.log("paused composing");
+							$rootScope.$apply(function() {
+							$rootScope.messages[clientJid].splice(($rootScope.messages[clientJid].length-1), 1 );
+							});
+							$rootScope.messages.composing = false;
+						}
+						
                         return true
  
-                    } // end of presence
+                    } 
  
  
                 function on_message(message) {
+					
 					var to = message.getAttribute('to');
 					var from = message.getAttribute('from');
 					var type = message.getAttribute('type');

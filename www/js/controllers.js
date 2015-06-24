@@ -44,32 +44,37 @@ angular.module('starter.controllers', [])
 	  }
 })
 
-.controller('ChatDetailsCtrl', function($scope, $rootScope, $stateParams, Chats, $ionicScrollDelegate, filterFilter) {
+.controller('ChatDetailsCtrl', function($scope, $rootScope, $stateParams, Chats, $ionicScrollDelegate, $timeout) {
+	 //GETTING ALL CHAT CONTACTS (IT WILL BE REPLACED BY THE XMPP ROSTER)
 	 $scope.contact = Chats.get($stateParams.contactId);
+	 //INITIALIZING DOM MODELS
 	 $scope.input = {};
 	 $scope.chat = {};
+	 //GETTING MY JID FROM GLOBAL SCOPE
 	 var myJID = $rootScope.myJID;
 	 
+	 var timeoutPromise;
+	 //GETTING MY CONTACT INFO BY MY JID (TEMPORARY)
 	 $scope.myContact = Chats.getByJID(myJID);
-
+	 
+	 //GETTING THE CONTACT JID
 	 var contactJid = $scope.contact.jid;
 	 
-	$scope.getChatMessages = function (){
-		
-		$scope.chat = $rootScope.messages[contactJid];
-		
-		return $scope.chat;
-	}
+	//GETTING THE 1TO1 ARRAY REFFERRING TO THE ACTUAL CONTACT THAT I'M CHATTING WITH 
+	$scope.getChatMessages = function (){ $scope.chat = $rootScope.messages[contactJid]; return $scope.chat;}
+	//GETTING TRUE OR FALSE IF THE CURRENT MESSAGE IS MINE OR NOT (USEFUL FOR MANIPULATING DOM LIST OF MESSAGES)
+	$scope.isOwnMessage = function(jid){return (jid==myJID) ? true : false;	}	
 	
-	$scope.isOwnMessage = function(jid){
-		
-		return (jid==myJID) ? true : false;
-	}	
-		
+	//CATCHING THE KEYDOWN ON THE TEXT AREA TO SEND "I'M TYPING" NOTIFICATION TO THE USER (NG-KEYPRESS NOT WORKING ON CHROME MOBILE)
 		$scope.input.sendTyping = function () {
 			
 			connect.chatstates.sendComposing($scope.contact.jid, 'chat');
 			console.log("typing");
+			$timeout.cancel(timeoutPromise);
+			 
+			  timeoutPromise = $timeout(function() {
+				connect.chatstates.sendPaused($scope.contact.jid, 'chat');
+			  }, 1000);
 		}
 	 
 	 

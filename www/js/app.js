@@ -9,6 +9,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 .run(function($ionicPlatform, $rootScope, $window) {
 	
 	 $rootScope.messages = {}; 
+	 $rootScope.messages.composing = false; 
 	 ( $window.localStorage['jid']!=null) ?  $rootScope.myJID = $window.localStorage['jid']: $rootScope.myJID = ""; 
 	 
 	

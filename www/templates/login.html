@@ -1,36 +1,32 @@
-<ion-view>
-  <ion-header-bar>
-    <h1 class="title">Login</h1>
-    <div class="buttons">
-      <button class="button button-clear" ng-click="closeLogin()">Close</button>
-    </div>
-  </ion-header-bar>
-  <ion-content>
+<ion-view class="login">
+ 
+  <ion-content >
+  <img src="img/login/logo_big.png" class="logo"/>
+  
     <form ng-submit="doLogin()">
       <div class="list">
-        <label class="item item-input">
-          <span class="input-label">Username</span>
-          <input type="text" ng-model="loginData.username">
+        <label class="item item-input item-floating-label">
+          <span class="input-label">email</span>
+          <input type="text" ng-model="loginData.username"  placeholder="email">
         </label>
-        <label class="item item-input">
-          <span class="input-label">Password</span>
-          <input type="password" ng-model="loginData.password">
+        <label class="item item-input item-floating-label">
+          <span class="input-label">password</span>
+          <input type="password"  placeholder="password" ng-model="loginData.password">
         </label>
         <label class="item">
-          <button class="button button-block button-positive" type="submit">Log in</button>
+          <button class="button button-block login_button" type="submit">LOGIN</button>
         </label>
+		 <label class="item">
+	<a class="button button-block register_button" href="register.html">REGISTRATI</a>
+	</label>
       </div>
+	 
 	  </form>
-	  
-	  <p>oppure</p>
-	  
-	  <form ng-submit="doLogin()">
-	   <div class="list">
-	   <label class="item">
-          <button class="button button-block button-positive" type="submit">Registrati</button>
-        </label>
-	  </div>
-	  </form>
+	
+	<form>
+	 
+	</form>	
+	
     
   </ion-content>
 </ion-view>

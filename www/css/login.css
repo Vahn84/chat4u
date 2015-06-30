@@ -1,0 +1,70 @@
+.login{
+background: url("../img/login/greenbg.jpg");
+background-size:contain;	
+}
+
+.login ion-content{
+text-align:center;
+}
+
+.login img.logo{
+width:30%;
+position:relative;
+margin: 0 auto;
+
+}
+
+.login form {
+background:none;
+width:70%;
+position:relative;
+margin: 0 auto;
+}
+
+.item {
+background: transparent;
+border-color: transparent;
+color:#50B68D;
+}
+
+.login form input {
+background: transparent;
+border: none;
+color: #50B68D;	
+
+}
+
+.input-label {
+color: #50B68D;	
+}
+
+button.login_button{
+background: #2F947C;
+color:#fff;
+font-size:40px;
+font-weight: 100;
+border-color: transparent;
+}
+
+button.login_button:hover{
+background:#257C65;
+}
+
+.login form submit.login_button{
+background:#2F947C;
+color:#fff;
+
+}
+
+a.register_button{
+position:relative;
+width:100%;
+display:block;
+padding:8px;
+text-decoration:none;
+background: #48ACB8;
+color:#fff;
+font-size:25px;
+font-weight: 100;
+border-color: transparent;
+}

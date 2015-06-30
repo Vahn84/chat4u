@@ -8,7 +8,7 @@ angular
  
               
  
-                connect = new Strophe.Connection('http://bosh.metajack.im:5280/xmpp-httpbind/');
+                connect = new Strophe.Connection('http://klub.com:7070/http-bind/');
 				
 				
  

@@ -1,33 +1,48 @@
 <ion-view class="login">
  
   <ion-content >
-  <img src="img/logo_big.png" class="logo"/>
+  <img src="img/login/logo_text.png" class="logo"/>
   
-    <form ng-submit="doLogin()">
+    <form ng-submit="doRegister()">
       <div class="list">
-        <label class="item item-input">
-          <span class="input-label">Username</span>
-          <input type="text" ng-model="loginData.username">
+        <label class="item item-input item-floating-label">
+          <span class="input-label">email</span>
+          <input type="text" ng-model="loginData.username"  placeholder="email">
         </label>
-        <label class="item item-input">
-          <span class="input-label">Password</span>
-          <input type="password" ng-model="loginData.password">
+        <label class="item item-input item-floating-label">
+          <span class="input-label">password</span>
+          <input type="password"  placeholder="password" ng-model="loginData.password">
         </label>
+		
+		<label class="item item-input item-floating-label">
+          <span class="input-label">nome</span>
+          <input type="text"  placeholder="nome" ng-model="loginData.nome">
+        </label>
+		
+		<label class="item item-input item-floating-label">
+          <span class="input-label">cognome</span>
+          <input type="text"  placeholder="cognome" ng-model="loginData.cognome">
+        </label>
+		
+		<label class="item item-input item-floating-label">
+          <span class="input-label">nickname</span>
+          <input type="text"  placeholder="nickname" ng-model="loginData.nickname">
+        </label>
+		
         <label class="item">
-          <button class="button button-block button-positive" type="submit">Log in</button>
+          <button class="button button-block login_button" type="submit">REGISTRATI</button>
         </label>
+		 <label class="item">
+	  
+	</label>
       </div>
+	 
 	  </form>
-	  
-	  <p>oppure</p>
-	  
-	  <form ng-submit="doLogin()">
-	   <div class="list">
-	   <label class="item">
-          <button class="button button-block button-positive" type="submit">Registrati</button>
-        </label>
-	  </div>
-	  </form>
+	
+	<form>
+	 <a class="button button-block register_button" ng-click="backToLogin()">INDIETRO</a>
+	</form>	
+	
     
   </ion-content>
 </ion-view>

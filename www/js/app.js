@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova', 'ngResource'])
 
 .run(function($ionicPlatform, $rootScope, $window) {
 	
@@ -78,8 +78,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   .state('login', {
     url: "/login",
     templateUrl: "templates/login.html",
-    controller: 'AppCtrl'
-  });
+    controller: 'LoginCtrl'
+  })
+  
+  .state('register', {
+    url: "/register",
+    templateUrl: "templates/register.html",
+    controller: 'RegisterCtrl'
+  })
+  
+  ;
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
 });

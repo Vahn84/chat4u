@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $rootScope, xmpp) {
+.controller('LoginCtrl', function($scope, $ionicModal, $timeout, $rootScope, xmpp, $state) {
   
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -9,6 +9,9 @@ angular.module('starter.controllers', [])
   //$scope.$on('$ionicView.enter', function(e) {
   //});
   
+  $scope.goRegister = function() {
+	  $state.go('register');
+  }
  
   // Form data for the login modal
   $scope.loginData = {};
@@ -28,6 +31,13 @@ angular.module('starter.controllers', [])
 
   
   };
+})
+
+.controller('RegisterCtrl', function($scope, $ionicModal, $timeout, $rootScope, xmpp, $state) {
+  
+  $scope.backToLogin = function() {
+	  $state.go('login');
+  }
 })
 
 .controller('ContactsCtrl', function($scope, Chats) {

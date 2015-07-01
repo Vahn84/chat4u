@@ -1,6 +1,6 @@
 angular
     .module('starter.services', [])
-    .service('xmpp', function($rootScope, $state,  $ionicScrollDelegate, $window) {
+    .service('xmpp', function($rootScope, $state,  $ionicScrollDelegate, $window, xmpp-addHandler) {
  
         return {
  
@@ -44,8 +44,91 @@ angular
                         if( $window.localStorage['jid']==null)
 						$window.localStorage['jid'] = jid;
 						$rootScope.myJID = $window.localStorage['jid'];
-                        connect.addHandler(on_presence, null, "presence");
-                        connect.addHandler(on_message, null, "message", "chat");
+						
+						xmpp-addHandler.add(connect);
+			
+            }
+        }
+ 
+    })
+	
+	
+	.service('xmpp-register', function($rootScope, $state,  $ionicScrollDelegate, $window, User, xmpp-addHandler) {
+ 
+        return {
+			
+			 register: function(email, password, nome, cognome, nickname) {
+				 
+				var user = {
+					
+					nome: nome,
+					cognome: cognome,
+					nickname: nickname,
+					email: email,
+					password: password
+										
+				}
+				 
+				connect = new Strophe.Connection();
+				 
+				 var callback = function (status) {
+				if (status === Strophe.Status.REGISTER) {
+					// fill out the fields
+					connect.register.fields.username = nickname;
+					connect.register.fields.password = password;
+					// calling submit will continue the registration process
+					connect.register.submit();
+				} else if (status === Strophe.Status.REGISTERED) {
+					console.log("registered!");
+					
+					User.save({},user, 
+					//user saved in db
+					function(data){ console.log(data); }, 
+					//error saving user in db
+					function(data){ console.log(data); }
+					);
+					
+					connect.authenticate();
+					
+				} else if (status === Strophe.Status.CONFLICT) {
+					console.log("Contact already existed!");
+				} else if (status === Strophe.Status.NOTACCEPTABLE) {
+					console.log("Registration form not properly filled out.")
+				} else if (status === Strophe.Status.REGIFAIL) {
+					console.log("The Server does not support In-Band Registration")
+				} else if (status === Strophe.Status.CONNECTED) {
+					// do something after successful authentication
+					
+					 if( $window.localStorage['jid']==null)
+						$window.localStorage['jid'] = user.nickname;
+						$rootScope.myJID = $window.localStorage['jid'];
+                    
+						xmpp-addHandler.add(connect);
+						
+					
+				} else {
+					// Do other stuff
+				}
+				
+				};
+
+				connect.register.connect('http://klub.com:7070/http-bind/', callback, 60, 1);
+				 
+			 }
+			
+		}
+		
+	})
+	
+		.service('xmpp-addHandler', function($rootScope, $state,  $ionicScrollDelegate, $window) {
+ 
+        return {
+			
+			 add: function(connect) {
+				 
+					
+					 connect.addHandler(on_presence, null, "presence");
+                      connect.addHandler(on_message, null, "message", "chat");
                         
 						
  
@@ -138,12 +221,17 @@ angular
                         return true
  
                     } // end of on_messsage
- 
-            }
-        }
- 
-    })
+				 
+			 }
+			 
+		}
+		
+	})
 	
+	
+	.factory('User', function($resource) {
+	  return $resource('http://95.110.233.212/klub/v1/user/:id');
+	})
 	
 	
 	.factory('Chats', function($rootScope) {

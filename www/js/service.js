@@ -1,29 +1,26 @@
 angular
     .module('starter.services', [])
-    .service('xmpp', function($rootScope, $state,  $ionicScrollDelegate, $window, xmpp-addHandler) {
- 
+    .service('xmpp', function($rootScope, $state,  $ionicScrollDelegate, $window, User, broadcast ) {
+	
+	var global_connect;
+	var self = this;
+	var state = $state;
+	
         return {
  
             auth: function(jid, pwd, sid, rid) {
- 
-              
- 
-                connect = new Strophe.Connection('http://klub.com:7070/http-bind/');
 				
-				
- 
+				var connect = self.global_connect;
+				if(!connect)
+				connect = new Strophe.Connection('http://klipzapp.com:7070/http-bind/');
+ 				self = this;
+ 				console.log("before connect.connect");	
                 connect.connect(jid, pwd, function(status) {
- 
+ 				
                     if (status === Strophe.Status.ATTACHED) {
 						console.log("attached");
-                        //add "Hooks", or Listeners if you will
-                        
-                        connect.addHandler(on_presence, null, "presence");
-                        connect.addHandler(on_message, null, "message", "chat");
- 
-                        connect.send($pres());
+     
 						
-                        $state.go('app.contacts-list');
  
                     } else if (status === Strophe.Status.AUTHENTICATING) {
                         console.log("AUTHENTICATING");
@@ -31,6 +28,7 @@ angular
                         console.log("AUTHFAIL");
                     } else if (status === Strophe.Status.CONNECTING) {
                         console.log("CONNECTING");
+                        console.log(jid+" "+pwd);
                     } else if (status === Strophe.Status.DISCONNECTED) {
                         console.log("DISCONNECTED");
                     }
@@ -41,24 +39,41 @@ angular
                         console.log("CONNECTED");
 						
 						 //add "Hooks", or Listeners if you will
-                        if( $window.localStorage['jid']==null)
+                        if( $window.localStorage['jid']==null) {
 						$window.localStorage['jid'] = jid;
 						$rootScope.myJID = $window.localStorage['jid'];
+						$window.localStorage['pwd'] = pwd;
+						$rootScope.myPWD = $window.localStorage['pwd'];
+
+						self.addHandlers(connect);
 						
-						xmpp-addHandler.add(connect);
+                        $state.go('app.home');
+
+
+					}
+
+					
+						
+						
+						
 			
             }
-        }
+        })
  
-    })
+    },
+	
+			 disconnect:  function() {
+				var connect = self.global_connect;
+				// connect.options.sync = true; // Switch to using synchronous requests since this is typically called onUnload.
+				connect.flush();
+				connect.disconnect();
+	},
 	
 	
-	.service('xmpp-register', function($rootScope, $state,  $ionicScrollDelegate, $window, User, xmpp-addHandler) {
- 
-        return {
-			
-			 register: function(email, password, nome, cognome, nickname) {
-				 
+			register: function(email, password, nome, cognome, nickname, state) {
+				var connect = self.global_connect;
+				self = this;
+				state = state;
 				var user = {
 					
 					nome: nome,
@@ -68,27 +83,57 @@ angular
 					password: password
 										
 				}
-				 
-				connect = new Strophe.Connection();
-				 
-				 var callback = function (status) {
+				
+				console.log(user);
+				
+				if(!connect)
+				connect = new Strophe.Connection('http://klipzapp.com:7070/http-bind/');
+				console.log(connect); 
+				
+				$window.localStorage['jid'] = null;
+				$window.localStorage['pwd']  = null;
+
+
+				var callback = function (status) {
+					console.log(status);
+					
 				if (status === Strophe.Status.REGISTER) {
+					console.log("registering");
 					// fill out the fields
-					connect.register.fields.username = nickname;
-					connect.register.fields.password = password;
+					connect.register.fields.username = user.nickname;
+					connect.register.fields.plainPassword = user.password;
+					connect.register.fields.password = user.password;
+					connect.register.fields.name = user.nome+" "+user.cognome;
+					connect.register.fields.email = user.nickname+"@klub.com";
 					// calling submit will continue the registration process
 					connect.register.submit();
+					console.log(self.connect); 
 				} else if (status === Strophe.Status.REGISTERED) {
 					console.log("registered!");
 					
 					User.save({},user, 
 					//user saved in db
-					function(data){ console.log(data); }, 
+					function(data){ console.log(data); 
+
+					self.addHandlers(connect); 
+
+					$window.localStorage['jid'] = user.nickname;
+					$rootScope.myJID = $window.localStorage['jid'];
+					$window.localStorage['pwd'] = user.password;
+					$rootScope.myPWD = $window.localStorage['pwd'];	
+					state.go('app.home');	
+					
+						
+                 
+					}, 
 					//error saving user in db
-					function(data){ console.log(data); }
+					function(data){ 
+					console.log(data); 
+					
+					}
 					);
 					
-					connect.authenticate();
+					
 					
 				} else if (status === Strophe.Status.CONFLICT) {
 					console.log("Contact already existed!");
@@ -98,55 +143,50 @@ angular
 					console.log("The Server does not support In-Band Registration")
 				} else if (status === Strophe.Status.CONNECTED) {
 					// do something after successful authentication
+					console.log("connected!");
 					
-					 if( $window.localStorage['jid']==null)
-						$window.localStorage['jid'] = user.nickname;
-						$rootScope.myJID = $window.localStorage['jid'];
-                    
-						xmpp-addHandler.add(connect);
-						
+
+								
 					
-				} else {
-					// Do other stuff
+				} 
+				
+				else if (status = Strophe.Status.REGIFAIL){
+					console.log("REGISTRATION FAILED: CODE "+status);
+					
+				}
+				
+				else {
+					console.log("ELSE "+status);
+					
 				}
 				
 				};
-
-				connect.register.connect('http://klub.com:7070/http-bind/', callback, 60, 1);
+				console.log("start registering");
+				connect.register.connect('klub.com', callback, 60, 1);
 				 
-			 }
-			
-		}
-		
-	})
-	
-		.service('xmpp-addHandler', function($rootScope, $state,  $ionicScrollDelegate, $window) {
- 
-        return {
-			
-			 add: function(connect) {
-				 
+			 },
+			 
+			 
+			  addHandlers: function(connect) {
+				 		
+				 	  console.log("aggiungo gli handlers");
 					
-					 connect.addHandler(on_presence, null, "presence");
+					  connect.addHandler(on_presence, null, "presence");
                       connect.addHandler(on_message, null, "message", "chat");
-                        
+                      connect.addHandler(_notificationReceived, null, "message", "chat");
+                      self.global_connect = connect;
+                      connect.send($pres());
 						
- 
-                        connect.send($pres());
+                      
 						
-                        $state.go('app.contacts-list');
-						connect.addHandler(_notificationReceived, null, "message", "chat");
 						
-                    }
-			
-                })	;
- 
-                // "Hooks"
+						// "Hooks"
  
                 function on_presence(presence) {
  
                         // handle presence
 						console.log("presence");	
+						console.log(presence);
                         return true
  
                     } // end of presence
@@ -221,17 +261,45 @@ angular
                         return true
  
                     } // end of on_messsage
-				 
-			 }
-			 
-		}
-		
+						
+						
+						
+                    }
+	
+	
+			
+	
+ }
+ 
 	})
-	
-	
+
 	.factory('User', function($resource) {
-	  return $resource('http://95.110.233.212/klub/v1/user/:id');
+	  return $resource('http://klipzapp.com/klub/v1/user');
 	})
+	
+	.factory('UserLocation', function($resource) {
+	  return $resource('http://klipzapp.com/klub/v1/location');
+	})
+	
+	.factory('broadcast', function ($rootScope, $document) {
+    var _events = {
+        onPause: 'onPause',
+        onResume: 'onResume'
+    };
+    $document.bind('resume', function () {
+        _publish(_events.onResume, null);
+    });
+    $document.bind('pause', function () {
+        _publish(_events.onPause, null);
+    });
+
+    function _publish(eventName, data) {
+        $rootScope.$broadcast(eventName, data)
+    }
+    return {
+        events: _events
+    }
+})
 	
 	
 	.factory('Chats', function($rootScope) {

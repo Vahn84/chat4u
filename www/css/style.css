@@ -23,6 +23,7 @@ background-color: transparent;
 #chat_detail .item { 
 background: transparent;
 border-color:transparent;
+color:#9C9B9B !important;
 }
 
 .item p {

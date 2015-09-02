@@ -1,6 +1,12 @@
 angular.module('starter.controllers', [])
 
-.controller('LoginCtrl', function($scope, $ionicModal, $timeout, $rootScope, xmpp, $state) {
+.controller('AppCtrl', function($scope) {
+
+})
+
+
+
+.controller('LoginCtrl', function($scope, $ionicModal, $timeout, $rootScope, xmpp, $state, $window) {
   
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -24,37 +30,66 @@ angular.module('starter.controllers', [])
 
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
-	$scope.loginData.username ="vahn@chatme.im";
-	$scope.loginData.password = "nevermind";
+	console.log('Doing login', $scope.loginData);
 	xmpp.auth($scope.loginData.username, $scope.loginData.password, null, null);  
-    console.log('Doing login', $scope.loginData);
+    
 
   
   };
+
+  if($window.localStorage['jid']!=null && $window.localStorage['pwd']!=null) {
+  	console.log($rootScope.myJID+" - "+ $rootScope.myPWD);
+  	 console.log('Doing login');
+  	xmpp.auth($rootScope.myJID,$rootScope.myPWD, null, null);  
+   
+  }
+
 })
 
 .controller('RegisterCtrl', function($scope, $ionicModal, $timeout, $rootScope, xmpp, $state) {
   
+  $scope.loginData = {};
+  
   $scope.backToLogin = function() {
 	  $state.go('login');
   }
+  
+   $scope.doRegister = function() {
+	   $rootScope.loginData = {email: $scope.loginData.email, password: $scope.loginData.password,
+	   nome: $scope.loginData.nome, cognome: $scope.loginData.cognome, nickname: $scope.loginData.nickname};
+	   
+	   xmpp.register($scope.loginData.email, $scope.loginData.password, $scope.loginData.nome, $scope.loginData.cognome, $scope.loginData.nickname, $state);
+	   
+   }
+  
 })
 
-.controller('ContactsCtrl', function($scope, Chats) {
+
+.controller('HomeCtrl', function($scope, $state, $stateParams, $ionicNavBarDelegate) {
+
+	console.log($state.current.name);
+
+})
 	
-	// Your app must execute AT LEAST ONE call for the current position via standard Cordova geolocation,
-    //  in order to prompt the user for Location permission.
-    window.navigator.geolocation.getCurrentPosition(function(location) {
-        console.log('Location from Phonegap');
-    });
+
+.controller('ContactsCtrl', function($scope, Chats, $state) {
 	
+
     $scope.contacts = Chats.all();
 	  $scope.remove = function(chat) {
 		Chats.remove(chat);
 	  }
+
+	  $scope.chatWithHim = function(contactId){
+	  		$state.go('app.chat', { contactId: contactId })
+	  }
 })
 
-.controller('ChatDetailsCtrl', function($scope, $rootScope, $stateParams, Chats, $ionicScrollDelegate, $timeout) {
+.controller('ChatDetailsCtrl', function($scope, $rootScope, $state, $stateParams, Chats, $ionicScrollDelegate, $timeout, xmpp,  broadcast) {
+
+	 console.log($state.current.name);
+
+	 
 	 //GETTING ALL CHAT CONTACTS (IT WILL BE REPLACED BY THE XMPP ROSTER)
 	 $scope.contact = Chats.get($stateParams.contactId);
 	 //INITIALIZING DOM MODELS
@@ -108,6 +143,9 @@ angular.module('starter.controllers', [])
 			}
 		
 	   }
+	   
+	  
+	 
 	 
 	
 	

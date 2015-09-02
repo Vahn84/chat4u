@@ -1,6 +1,17 @@
+.login .scroll-content {
+  display: table !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+.login .scroll {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+
 .login{
-background: url("../img/login/greenbg.jpg");
-background-size:contain;	
+background: url("../img/login/greenbg.jpg") no-repeat 0 0;
+background-size:cover;	
 }
 
 .login ion-content{

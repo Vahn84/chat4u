@@ -16,7 +16,7 @@
       <ion-item ng-repeat="chat in getChatMessages() track by $index" href="" style="padding-top:20px;">
 		<div class="">
         <img class="profile-pic" ng-class="(isOwnMessage(chat.jid)) ? 'pull-right' : 'pull-left'" 
-		ng-src="{{(isOwnMessage(chat.jid)) ? myContact.face : contact.face}}"/>
+		ng-src="img/home/avatar.png"/>
 		<p class="chat_message" ng-class="(isOwnMessage(chat.jid)) ? 'pull-right text-right' : 'pull-left text-left'" >{{chat.text}}<br>
 		<small>{{isOwnMessage(chat.jid) == true && myContact.name || contact.name}}</small>
 		</p>

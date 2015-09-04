@@ -1,28 +1,75 @@
+<ion-nav-bar id="home-nav" class="gradient-background" hide-back-button="false">
+      
 
-<ion-view view-title="">
- <tab-slide-box class="has-header">
-            <div class="tsb-icons gradient-background" >
-              <div class="tsb-ic-wrp">
-              <ion-scroll direction="x" class="tsb-hscroll">
-              <a href="javascript:;" class="ion-home1">Vicine</a>
-              <a href="javascript:;" class="ion-ios-game-controller-b1">Preferite</a>
-              <a href="javascript:;" class="ion-email1">Recenti</a>
-          
-              </ion-scroll>
-            </div>
-            </div>
-              <ion-slide-box show-pager="false" on-slide-changed="slideHasChanged($index)">
-                  <ion-slide>
-                      <h1>Chat Vicine</h1>
+      <ion-nav-buttons side="left" class="">
+        <button class="button button-icon button-clear ion-navicon"  menu-toggle="left">
+        </button>
+      </ion-nav-buttons>
+    
+    
+   
+       <ion-nav-buttons side="right">
+       <button class="button button-icon button-clear ion-android-search" >
+        </button>
+        <button class="button button-icon button-clear ion-android-people" menu-toggle="right" >
+        </button>
+      </ion-nav-buttons>
+
+    </ion-nav-bar>
+
+<ion-view view-title="" class="has-header">
+
+              <ion-slide-box show-pager="false" ion-slide-tabs>
+                   <ion-slide ion-slide-tab-label="Vicine">
+                  <ion-content class="padding">
+                        <ion-list style="padding-top:40px;">
+                     <ion-item ng-repeat="chat in chats_recenti" href="#/app/chat/{{chat.id}}" class="contact-item " style="padding:0">
+                      
+                      
+                        <a class="item item-avatar" ng-click="goToProfile(chat.type)">
+                             <img ng-src="img/home/avatar.png" style="max-width:60px; max-height:60px; left: 0px">
+                             <h2 style="color:#fff; font-family: Roboto; font-size:20px;">{{chat.name}}</h2>
+                            <p style="color:#9C9B9B">{{chat.last_chat}}</p>
+                          </a>
+
+                    </ion-item>
+                  </ion-list>
+                  </ion-content>
                   </ion-slide>
-                  <ion-slide>
-                      <h1>Chat Preferite</h1>
+                   <ion-slide ion-slide-tab-label="Preferite">
+                    <ion-content class="padding">    
+                        <ion-list>
+                    <ion-item ng-repeat="chat in chats_recenti" ng-click="goToProfile(chat.type)" class="contact-item " style="padding:0">
+                      
+                        <a class="item item-avatar" href="#">
+                             <img ng-src="img/home/avatar.png" style="max-width:60px; max-height:60px; left: 0px">
+                             <h2 style="color:#fff; font-family: Roboto; font-size:20px;">{{chat.name}}</h2>
+                            <p style="color:#9C9B9B">{{chat.last_chat}}</p>
+                          </a>
+
+                    </ion-item>
+                  </ion-list>
+                </ion-content>
                   </ion-slide>
-                  <ion-slide>
-                     <h1>Chat Recenti</h1>
+
+                   <ion-slide ion-slide-tab-label="Recenti">
+                     <ion-content class="padding"> 
+                        <ion-list>
+                     <ion-item ng-repeat="chat in chats_recenti" ng-click="goToProfile(chat.type)" class="contact-item " style="padding:0">
+                      
+                      
+                        <a class="item item-avatar" href="#">
+                                <img ng-src="img/home/avatar.png" style="max-width:60px; max-height:60px; left: 0px">
+                             <h2 style="color:#fff; font-family: Roboto; font-size:20px;">{{chat.name}}</h2>
+                            <p style="color:#9C9B9B">{{chat.last_chat}}</p>
+                          </a>
+
+                    </ion-item>
+                  </ion-list>
+                  </ion-content>
                   </ion-slide>
        
   
               </ion-slide-box>
-            </tab-slide-box>
+            
  </ion-view>

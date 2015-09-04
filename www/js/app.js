@@ -4,21 +4,12 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova', 'ngResource', 'tabSlideBox'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova', 'ngResource'])
 
 .run(function($ionicPlatform, $rootScope, $window, xmpp, UserLocation) {
-	 $window.localStorage['jid'] = "vahn";
-   $window.localStorage['pwd'] ="nevermind";
+	
 
-    $rootScope.$on('$stateChangeSuccess', function (evt, toState) {
-    console.log('stateChangeSuccess');
-    console.log(toState);
-    if (toState.name=="app.chat") {
-      $rootScope.changeColor = true;
-    } else {
-      $rootScope.changeColor = false;
-    }
-  });
+ 
 
 	 $rootScope.messages = {}; 
 	 $rootScope.messages.composing = false; 
@@ -134,10 +125,24 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   $stateProvider
 
   .state('app', {
-    url: "/app",
     abstract: true,
-    templateUrl: "templates/menu.html",
-    controller: 'AppCtrl'
+     views: {
+
+      '': {
+        templateUrl: "templates/menu.html",
+        controller: 'AppCtrl'
+      },
+      'listaContatti@app': {
+        templateUrl: "templates/contacts-list.html",
+        controller: 'ContactsCtrl'
+      },
+      'leftMenu@app': {
+        templateUrl: "templates/left-menu.html",
+        controller: 'leftMenuCtrl'
+      }
+
+     }
+
   })
 
   .state('app.home', {
@@ -146,12 +151,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       'singleContent': {
         templateUrl: "templates/home.html",
         controller: 'HomeCtrl'
-      },
-   
-      'listaContatti': {
-          templateUrl: "templates/contacts-list.html",
-          controller: 'ContactsCtrl'
-        }
+      }
 
     }
   })
@@ -164,6 +164,49 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
    'singleContent': {
     templateUrl: "templates/chat.html",
     controller: 'ChatDetailsCtrl'
+    }
+  }
+})  
+
+
+  .state('app.multichat', {
+    url: "/multichat/:room",
+  views: {
+   'singleContent': {
+    templateUrl: "templates/multichat.html",
+    controller: 'MultiChatDetailsCtrl'
+    }
+  }
+})  
+
+
+ .state('app.userprofile', {
+    url: "/userprofile/:userId",
+  views: {
+   'singleContent': {
+    templateUrl: "templates/user-profile.html",
+    controller: 'UserProfileCtrl'
+    }
+  }
+})  
+
+  .state('app.vendorprofile', {
+    url: "/vendorprofile/:vendorId",
+  views: {
+   'singleContent': {
+    templateUrl: "templates/vendor-profile.html",
+    controller: 'VendorProfileCtrl'
+    }
+  }
+})  
+
+
+ .state('app.richieste', {
+    url: "/richieste",
+  views: {
+   'singleContent': {
+    templateUrl: "templates/richieste.html",
+    controller: 'RichiesteCtrl'
     }
   }
 })  

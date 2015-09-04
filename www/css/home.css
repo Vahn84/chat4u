@@ -1,3 +1,7 @@
+.platform-android .bar .title {
+    line-height: 54px;
+}
+
 .gradient-background {
 
  background-color:#332F3F !important;
@@ -10,6 +14,27 @@
  background-image:-webkit-gradient(linear, left bottom, right bottom, color-stop(0%,#332F3F), color-stop(100%,#00A099)) !important;
  color:#fff;
 
+}
+
+.bar {
+height: 54px !important;  
+}
+
+.bar .title {
+    height: 100%;
+
+    }
+
+.has-header {
+  top:54px !important;
+}
+
+ion-nav-bar#home-nav.hide {
+display: block !important;  
+}
+
+ion-nav-bar#home-nav ion-nav-buttons  .hide {
+display: block !important;  
 }
 
 /*LEFT MENU ----------------------------------------------------*/
@@ -44,6 +69,19 @@
 	}
 
 
+ion-slide ion-content.has-header {
+  top:0 !important;
+}
+
+ion-slide ion-list div.list {
+  padding-bottom: 100px;  
+}
+
+ion-slide ion-list div.list .item-complex .item-content {
+    padding: 0;
+
+}
+
 /*LISTA AMICI ----------------------------------------------------*/
 
 .item-thumbnail-left, .item-thumbnail-left .item-content {
@@ -55,7 +93,7 @@
 .contact-item .item-content {
 	border-bottom:1px solid rgba(0,0,0,0.1);
 	color:#fff;	
-
+  text-align: left;
 }
 
 
@@ -63,10 +101,40 @@
 /*SINGLE CHAT--------------------------*/
 
 bar.bar-custom, bar.bar-custom .bar.bar-positive, .bar-custom .nav-bar-block ion-header-bar {
-
-		background-color: rgba(255,255,255, 0) !important;
-		background-image: linear-gradient(0deg, rgba(255,0,0,0), rgba(255,0,0,0) 50%) !important;
+    border: 0px !important;
+    border-bottom-color: transparent !important;
+    background-image: none !important;
+    border-bottom: none !important;
+    background-color: transparent !important;
+    background: none !important;
 	}
+
+ion-nav-bar.bar-custom ion-header-bar.bar.bar-header {
+    background: none !important;
+        height: 84px !important;
+}
+
+  .item-avatar h2{
+    color:#3C3C3B !important;
+
+}
+
+.item-avatar, .item-avatar .item-content, .item-avatar-left, .item-avatar-left .item-content {
+    padding-left: 72px;
+    min-height: 42px;
+}
+
+.item-avatar > img  {
+    position: absolute;
+    top: 8px;
+    left: 16px;
+    max-width: 40px;
+    max-height: 40px;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
 
 
   .bar-custom-color{
@@ -74,11 +142,172 @@ bar.bar-custom, bar.bar-custom .bar.bar-positive, .bar-custom .nav-bar-block ion
 		color:#9C9B9B !important;
 	}
 
+.bar .button.back-button {
+    display: block !important;
+    font-size: 30px;
+    background:none;
+    border-color: transparent !important;
+
+}
+
 
  ion-header-bar.bar.bar-custom-color .title{
 
-		color:#3C3C3B !important;
-	}
+    color:#3C3C3B !important;
+   
+  }
+
+
+ion-nav-bar.bar-custom .item-avatar h2{
+        padding-right: 65px;
+    text-align: right;
+    font-size: 18px;
+    margin-top: 6px;
+
+}
+
+ion-nav-bar.bar-custom .item-avatar > img  {
+    left: auto;
+    right: 8px;
+    top:6px;
+    width:auto;
+    height: 65px;
+    max-width: 75px;
+    max-height: 75px;
+}
+
+ion-nav-bar.bar-custom  .item-avatar {
+    min-height: 72px;
+}
+
+textarea {
+  height: 34px !important;
+  line-height: auto !important;
+  font-size:18px;
+}
+
+
+/* PROFILE ----------------------------------------------------*/
+
+ion-content#profile.has-header{
+  top: 0 !important;
+}
+
+#profile-bg{
+    padding:0;
+    background: url(../img/profile/bg.jpg) no-repeat center center;
+    background-size: cover;
+    text-align:center;
+    padding-top:20px;
+    padding-bottom:20px;
+}
+
+#profile-bg h2 , #profile-bg p{
+color:#fff;
+}
+
+ion-content#profile div.list i.icon, ion-content#profile h2 {
+  color:#00A099;
+}
+
+#profile-bg img.avatar{
+  width:30%;
+  height: auto;
+  display: inline-block;
+}
+
+#hobby ul li {
+float:left;
+padding:4px;
+
+}
+
+#friends a.item-avatar {
+      min-height: 72px;
+}
+
+#friends a.item-avatar > img {
+  left:0px;
+}
 
 
 
+/* PROFILE VENDOR----------------------------------------------------*/
+
+ion-content#vendor-profile.has-header{
+  top: 0 !important;
+}
+
+#vendor-profile-bg{
+    padding:0;
+    background: url(../img/profile/bg.jpg) no-repeat center center;
+    background-size: cover;
+    text-align:center;
+    padding-top:20px;
+    padding-bottom:20px;
+}
+
+#vendor-profile-bg h2 , #vendor-profile-bg p{
+color:#fff;
+}
+
+ion-content#vendor-profile div.list i.icon, ion-content#vendor-profile h2 {
+  color:#00A099;
+}
+
+#vendor-profile-bg img.avatar{
+  width:30%;
+  height: auto;
+  display: inline-block;
+}
+
+ion-content#vendor-profile button#joinChat {
+  background:#00A099;
+  color:#fff;
+}
+
+#friends a.item-avatar {
+      min-height: 72px;
+}
+
+#friends a.item-avatar > img {
+  left:0px;
+}
+
+
+/* RICHIESTE ----------------------------------------------------*/
+
+
+ion-content#richieste ion-item  a.item-avatar > img {
+  top: 0px;
+}
+
+ion-content#richieste ion-item  a.activated{
+background: none !important;
+border-color: transparent !important;
+}
+
+ion-content#richieste ion-item {
+border-bottom:1px solid rgba(0,0,0,0.1);
+
+}
+
+ion-content#richieste ion-item span.title{
+ color:#00A099;
+}
+
+ion-content#richieste ion-item.item-divider{
+border-bottom: 0px;
+border-color: transparent;
+}
+
+ion-content#richieste ion-item div.buttons button:before {
+  line-height: 64px;
+  font-size:34px;
+}
+
+ion-content#richieste ion-item div.buttons button.ion-ios-checkmark-outline,
+ion-content#richieste ion-item div.buttons button.ion-ios-checkmark {
+
+color:#00A099;
+} 

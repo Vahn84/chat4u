@@ -1,7 +1,12 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope) {
+.controller('AppCtrl', function($scope, $state) {
+	
+	$scope.goToProfile = function(contactId){
 
+		$state.go('app.userprofile', {contactId: contactId});
+
+	}
 })
 
 
@@ -37,12 +42,7 @@ angular.module('starter.controllers', [])
   
   };
 
-  if($window.localStorage['jid']!=null && $window.localStorage['pwd']!=null) {
-  	console.log($rootScope.myJID+" - "+ $rootScope.myPWD);
-  	 console.log('Doing login');
-  	xmpp.auth($rootScope.myJID,$rootScope.myPWD, null, null);  
-   
-  }
+
 
 })
 
@@ -65,33 +65,116 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('HomeCtrl', function($scope, $state, $stateParams, $ionicNavBarDelegate) {
-
+.controller('HomeCtrl', function($scope, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate) {
+	
 	console.log($state.current.name);
+
+  $scope.goToProfile = function(type){
+  	(type=="multi") ? $state.go("app.vendorprofile") : $state.go("app.userprofile");
+  }
+
+  $scope.chats_recenti = [{
+    id: 0,
+    name: 'Palestra',
+	jid: 'vahn',
+	type: 'multi',
+	last_chat: 'Fortuna vitrea est; tum cum splendet, fru...',
+    face: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
+  }, {
+    id: 1,
+    name: 'Alessandro Lambiase',
+    jid: 'alessandro',
+    last_chat: 'Fortuna vitrea est; tum cum splendet, fru...',
+    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+  }, {
+    id: 2,
+    name: 'Comics Center',
+    jid: 'giulia',
+	type: 'multi',
+    last_chat: 'Fortuna vitrea est; tum cum splendet, fru...',
+    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+  }, {
+    id: 3,
+    name: 'Giulia',
+    jid: 'giulia',
+	type: 'single',
+    last_chat: 'Fortuna vitrea est; tum cum splendet, fru...',
+    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+  }, {
+    id: 4,
+    name: 'Ristorante',
+    jid: 'giulia',
+	type: 'multi',
+    last_chat: 'Fortuna vitrea est; tum cum splendet, fru...',
+    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+  },{
+    id: 0,
+    name: 'Palestra',
+	jid: 'vahn',
+	type: 'multi',
+	last_chat: 'Fortuna vitrea est; tum cum splendet, fru...',
+    face: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
+  }, {
+    id: 1,
+    name: 'Alessandro Lambiase',
+    jid: 'alessandro',
+    last_chat: 'Fortuna vitrea est; tum cum splendet, fru...',
+    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+  }, {
+    id: 2,
+    name: 'Comics Center',
+    jid: 'giulia',
+	type: 'multi',
+    last_chat: 'Fortuna vitrea est; tum cum splendet, fru...',
+    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+  }, {
+    id: 3,
+    name: 'Giulia',
+    jid: 'giulia',
+	type: 'single',
+    last_chat: 'Fortuna vitrea est; tum cum splendet, fru...',
+    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+  }, {
+    id: 4,
+    name: 'Ristorante',
+    jid: 'giulia',
+	type: 'multi',
+    last_chat: 'Fortuna vitrea est; tum cum splendet, fru...',
+    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+  }];
+
 
 })
 	
 
 .controller('ContactsCtrl', function($scope, Chats, $state) {
 	
-
+	var contact_list_state=  $state.current.name;
     $scope.contacts = Chats.all();
 	  $scope.remove = function(chat) {
 		Chats.remove(chat);
 	  }
 
 	  $scope.chatWithHim = function(contactId){
-	  		$state.go('app.chat', { contactId: contactId })
+	  		console.log($state.current.name);
+	  		$state.go('app.chat', { contactId: contactId, back_view:  contact_list_state});
 	  }
 })
 
-.controller('ChatDetailsCtrl', function($scope, $rootScope, $state, $stateParams, Chats, $ionicScrollDelegate, $timeout, xmpp,  broadcast) {
+.controller('leftMenuCtrl', function($scope, Chats, $state) {
 
-	 console.log($state.current.name);
+	  $scope.goTo = function(state){ 		
+	  		$state.go(state);
+	  }
+})
 
-	 
+.controller('ChatDetailsCtrl', function($scope, $rootScope, $state, $stateParams, Chats, $ionicScrollDelegate, $timeout, xmpp,  $ionicHistory) {
+
+	 console.log($stateParams.back_view);
+
 	 //GETTING ALL CHAT CONTACTS (IT WILL BE REPLACED BY THE XMPP ROSTER)
 	 $scope.contact = Chats.get($stateParams.contactId);
+	 $scope.myTitle = '<a class="item item-avatar" href="#"> <img src="img/home/avatar.png"><h2>'+$scope.contact.name+'</h2></a>';
 	 //INITIALIZING DOM MODELS
 	 $scope.input = {};
 	 $scope.chat = {};
@@ -113,12 +196,12 @@ angular.module('starter.controllers', [])
 	//CATCHING THE KEYDOWN ON THE TEXT AREA TO SEND "I'M TYPING" NOTIFICATION TO THE USER (NG-KEYPRESS NOT WORKING ON CHROME MOBILE)
 		$scope.input.sendTyping = function () {
 			
-			connect.chatstates.sendComposing($scope.contact.jid, 'chat');
+			xmpp.global_connect.chatstates.sendComposing($scope.contact.jid+"@klipzapp.com", 'chat');
 			console.log("typing");
 			$timeout.cancel(timeoutPromise);
 			 
 			  timeoutPromise = $timeout(function() {
-				connect.chatstates.sendPaused($scope.contact.jid, 'chat');
+				xmpp.global_connect.chatstates.sendPaused($scope.contact.jid+"@klipzapp.com", 'chat');
 			  }, 1000);
 		}
 	 
@@ -127,8 +210,8 @@ angular.module('starter.controllers', [])
 			
 			if($scope.input.message.length){
 				
-					var sendMessageQuery = $msg({to: $scope.contact.jid, type: 'chat'}).c('body').t($scope.input.message);
-					connect.send(sendMessageQuery);
+					var sendMessageQuery = $msg({to: $scope.contact.jid+"@klipzapp.com", type: 'chat'}).c('body').t($scope.input.message);
+					xmpp.global_connect.send(sendMessageQuery);
 					
 					var message_text = $scope.input.message;
 					var array = {};
@@ -137,6 +220,99 @@ angular.module('starter.controllers', [])
 					array.text = message_text;
 					
 					$rootScope.messages[contactJid].push(array);
+					$ionicScrollDelegate.scrollBottom(true);
+						
+					$scope.input.message="";
+			}
+		
+	   }
+	   
+	  
+	 
+	 
+	
+	
+})
+
+
+.controller('UserProfileCtrl', function($scope, Chats, $state, $stateParams) {
+	
+    $scope.contact = Chats.get($stateParams.contactId);
+
+
+	
+
+})
+
+
+.controller('VendorProfileCtrl', function($scope, Chats, $state, $stateParams) {
+	
+   $scope.joinChat = function(room) {
+
+		$state.go("app.multichat", {room: room});
+
+		}
+
+
+	
+
+})
+
+.controller('RichiesteCtrl', function($scope, Chats, $state, $stateParams) {
+	
+
+
+		
+
+})
+.controller('MultiChatDetailsCtrl', function($scope, $rootScope, $state, $stateParams, Chats, $ionicScrollDelegate, $timeout, xmpp,  $ionicHistory) {
+
+	 console.log($stateParams.back_view);
+
+	  var myJID = $rootScope.myJID;
+
+	 //GETTING ALL CHAT CONTACTS (IT WILL BE REPLACED BY THE XMPP ROSTER)
+	 $scope.roomJid = $stateParams.room+"@conference.klipzapp.com";
+	 var roomJid =  $scope.roomJid ;
+	 $scope.myTitle = '<a class="item item-avatar" href="#"> <img src="img/home/avatar.png"><h2>'+$stateParams.room+'</h2></a>';
+	 //INITIALIZING DOM MODELS
+	 $scope.input = {};
+	 $scope.chat = {};
+	 $rootScope.messages[roomJid] = [];
+	 //GETTING MY JID FROM GLOBAL SCOPE
+	 xmpp.roomJid = roomJid;
+	 
+	 var timeoutPromise;
+
+
+	 var completeJid = {to:$scope.roomJid+'/'+ $rootScope.myJID}; 
+	 var presence = $pres(completeJid); 
+	 presence.c('x', {xmlns : 'http://jabber.org/protocol/muc#user'}, null); 
+	 xmpp.global_connect.send(presence.tree());
+
+	 
+	//GETTING THE 1TO1 ARRAY REFFERRING TO THE ACTUAL CONTACT THAT I'M CHATTING WITH 
+	$scope.getChatMessages = function (){ $scope.chat = $rootScope.messages[roomJid]; return $scope.chat;}
+	//GETTING TRUE OR FALSE IF THE CURRENT MESSAGE IS MINE OR NOT (USEFUL FOR MANIPULATING DOM LIST OF MESSAGES)
+	$scope.isOwnMessage = function(jid){return (jid==myJID) ? true : false;	}	
+	
+	
+	 
+	 
+	   $scope.sendMessage = function() {
+			
+			if($scope.input.message.length){
+				
+					var sendMessageQuery = $msg({to: roomJid, type: 'groupchat'}).c('body').t($scope.input.message);
+					xmpp.global_connect.send(sendMessageQuery);
+					
+					var message_text = $scope.input.message;
+					var array = {};
+					
+					array.jid = myJID;
+					array.text = message_text;
+					
+					$rootScope.messages[roomJid].push(array);
 					$ionicScrollDelegate.scrollBottom(true);
 						
 					$scope.input.message="";

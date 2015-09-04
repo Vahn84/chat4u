@@ -1,100 +1,17 @@
-<ion-side-menus enable-menu-with-back-views="false">
+<ion-side-menus enable-menu-with-back-views="true">
 
 
 
 
-      <ion-side-menu side="left" width="120" style="background:#332F3F; color:#ffff">
-    <ion-content>
-      <ion-list>
-        <ion-item menu-close class="left-menu-cell">
-         <div class="item">
-          <img src="img/home/avatar.png" style="width:75px; height: auto">
-         </div>
-        </ion-item>
+      <ion-side-menu side="left" width="120" >
+        
+         <ion-nav-view name="leftMenu"></ion-nav-view>
 
-        <ion-item menu-close class="left-menu-cell">
-         
-         <div class="item">
-         <a class="button button-icon" href="#/app/home">
-           <i class="icon ion-android-home my-icon" ></i>
-           <span style="font-size:15px">Home</span>
-         </a>
-        </div>
-        </ion-item>
-
-        <ion-item menu-close class="left-menu-cell">
-         
-         <div class="item">
-         <a class="button button-icon" >
-           <i class="icon ion-android-notifications my-icon" ></i>
-           <span style="font-size:15px">Notifiche</span>
-         </a>
-        </div>
-        </ion-item>
-
-          <ion-item menu-close class="left-menu-cell">
-        <div class="item">
-         <a class="button button-icon">
-           <i class="icon ion-android-person-add my-icon" ></i>
-           <span style="font-size:15px">Richieste</span>
-         </a>
-         </div>
-         </ion-item>
-           <ion-item menu-close class="left-menu-cell">
-        <div class="item">
-         <a class="button button-icon">
-           <i class="icon ion-android-calendar my-icon" ></i>
-           <span style="font-size:15px">Eventi</span>
-         </a>
-         </div>
-         </ion-item>
-
-          <ion-item menu-close class="left-menu-cell">
-         <div class="item">
-         <a class="button button-icon">
-           <i class="icon ion-android-options my-icon" ></i>
-           <span style="font-size:15px">Opzioni</span>
-         </a>
-        </div>
-        </ion-item>
-
-        <ion-item menu-close class="left-menu-cell">
-         <div class="item">
-         <a class="button button-icon">
-           <i class="icon ion-android-exit my-icon" ></i>
-           <span style="font-size:15px">Esci</span>
-         </a>
-         </div>
-         </ion-item>
-    
-    
-      </ion-list>
-    </ion-content>
   </ion-side-menu>
 
 
     <ion-side-menu-content drag-content="false">
 
-    <ion-nav-bar class="gradient-background" ng-class="{'bar-custom' : changeColor}">
-      <ion-nav-back-button>
-      </ion-nav-back-button>
-
-      <ion-nav-buttons side="left">
-        <button class="button button-icon button-clear ion-navicon" ng-class="{'bar-custom-color' : changeColor}" menu-toggle="left">
-        </button>
-      </ion-nav-buttons>
-    
-    
-   <ion-nav-buttons side="right">
-        <button class="button button-icon button-clear ion-android-search" ng-class="{'bar-custom-color' : changeColor}">
-        </button>
-      </ion-nav-buttons>
-       <ion-nav-buttons side="right">
-        <button class="button button-icon button-clear ion-android-people" menu-toggle="right" ng-class="{'bar-custom-color' : changeColor}">
-        </button>
-      </ion-nav-buttons>
-
-    </ion-nav-bar>
 
     <ion-nav-view name="singleContent"></ion-nav-view>
 

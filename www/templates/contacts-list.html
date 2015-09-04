@@ -1,7 +1,7 @@
-<ion-view style="background: #332F3F">
-  <ion-content class="has-header">
+<ion-view >
+  <ion-content class="has-header" style="background: #332F3F">
     <ion-list>
-      <ion-item menu-close ng-repeat="contact in contacts" href="#/app/chat/{{contact.id}}" class="contact-item item-thumbnail-left">
+      <ion-item menu-close ng-repeat="contact in contacts" ng-click="chatWithHim(contact.id)" class="contact-item item-thumbnail-left">
          <img ng-src="img/home/avatar.png" style="width:30px; height:auto">
          <h2 style="color:#fff; font-family: Roboto">{{contact.name}}</h2>
       </ion-item>

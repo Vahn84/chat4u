@@ -36,9 +36,8 @@ angular.module('starter.controllers', [])
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
 	console.log('Doing login', $scope.loginData);
-	xmpp.auth($scope.loginData.username, $scope.loginData.password, null, null);  
-    
-
+	xmpp.auth($scope.loginData.username+"@klipzapp.com", $scope.loginData.password, null, null);  
+   
   
   };
 
@@ -196,13 +195,13 @@ angular.module('starter.controllers', [])
 	//CATCHING THE KEYDOWN ON THE TEXT AREA TO SEND "I'M TYPING" NOTIFICATION TO THE USER (NG-KEYPRESS NOT WORKING ON CHROME MOBILE)
 		$scope.input.sendTyping = function () {
 			
-			xmpp.global_connect.chatstates.sendComposing($scope.contact.jid+"@klipzapp.com", 'chat');
+			connect.chatstates.sendComposing($scope.contact.jid, 'chat');
 			console.log("typing");
 			$timeout.cancel(timeoutPromise);
 			 
 			  timeoutPromise = $timeout(function() {
-				xmpp.global_connect.chatstates.sendPaused($scope.contact.jid+"@klipzapp.com", 'chat');
-			  }, 1000);
+				connect.chatstates.sendPaused($scope.contact.jid, 'chat');
+			  }, 300);
 		}
 	 
 	 
@@ -210,8 +209,8 @@ angular.module('starter.controllers', [])
 			
 			if($scope.input.message.length){
 				
-					var sendMessageQuery = $msg({to: $scope.contact.jid+"@klipzapp.com", type: 'chat'}).c('body').t($scope.input.message);
-					xmpp.global_connect.send(sendMessageQuery);
+					var sendMessageQuery = $msg({to: $scope.contact.jid, type: 'chat'}).c('body').t($scope.input.message);
+					connect.send(sendMessageQuery);
 					
 					var message_text = $scope.input.message;
 					var array = {};
@@ -270,6 +269,7 @@ angular.module('starter.controllers', [])
 	 console.log($stateParams.back_view);
 
 	  var myJID = $rootScope.myJID;
+	  $scope.myContact = Chats.getByJID(myJID);
 
 	 //GETTING ALL CHAT CONTACTS (IT WILL BE REPLACED BY THE XMPP ROSTER)
 	 $scope.roomJid = $stateParams.room+"@conference.klipzapp.com";
@@ -312,8 +312,8 @@ angular.module('starter.controllers', [])
 					array.jid = myJID;
 					array.text = message_text;
 					
-					$rootScope.messages[roomJid].push(array);
-					$ionicScrollDelegate.scrollBottom(true);
+					// $rootScope.messages[roomJid].push(array);
+					// $ionicScrollDelegate.scrollBottom(true);
 						
 					$scope.input.message="";
 			}

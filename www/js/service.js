@@ -1,6 +1,6 @@
 angular
     .module('starter.services', [])
-    .service('xmpp', function($rootScope, $state,  $ionicScrollDelegate, $window, User, broadcast ) {
+    .service('xmpp', function($rootScope, $state,  $ionicScrollDelegate, $window, User, broadcast, Chats ) {
 	
 	var global_connect;
 	var self = this;
@@ -10,16 +10,23 @@ angular
         return {
  
             auth: function(jid, pwd, sid, rid) {
+				self = this;
 				
-				var connect = self.global_connect;
-				if(!connect)
 				connect = new Strophe.Connection('http://klipzapp.com:7070/http-bind/');
- 				self = this;
+ 				
  				console.log("before connect.connect");	
                 connect.connect(jid, pwd, function(status) {
  				
                     if (status === Strophe.Status.ATTACHED) {
 						console.log("attached");
+                        //add "Hooks", or Listeners if you will
+                        
+                        connect.addHandler(on_presence, null, "presence");
+                        connect.addHandler(on_message, null, "message", "chat");
+
+ 
+                        connect.send($pres());
+						
      
 						
  
@@ -40,29 +47,19 @@ angular
                         console.log("CONNECTED");
 						
 						 //add "Hooks", or Listeners if you will
-                        if( $window.localStorage['jid']==null) {
-						
-			
-						
-						
-                      
-
-
-					}
 
 					$window.localStorage['jid'] = jid;
 						$rootScope.myJID = $window.localStorage['jid'];
 						$window.localStorage['pwd'] = pwd;
 						$rootScope.myPWD = $window.localStorage['pwd'];
 
-					  console.log("aggiungo gli handlers");
+					  
 						
-					  connect.addHandler(on_presence, null, "presence");
-                      connect.addHandler(on_message, null, "message", "chat");
-                      connect.addHandler(_notificationReceived, null, "message", "chat");
-                      connect.send($pres());
-					  console.log("handlers added");
-					  $state.go('app.home');	
+					  self.addHandlers();
+
+					  connect.send($pres());
+
+					  if($rootScope.isLogginIn) { $state.go('app.home');  $rootScope.isLogginIn = false;}
 						
 
 				 	  self.global_connect = connect;
@@ -72,11 +69,36 @@ angular
 						
 						// "Hooks"
  
-                function on_presence(presence) {
+              
+						
+						
+						
+                    
+						
+			
+            }
+        })
+ 
+    },
+
+
+    addHandlers: function() {
+
+    			   console.log("aggiungo gli handlers");
+
+    			   connect.addHandler(on_presence, null, "presence");
+                   connect.addHandler(on_message, null, "message", "chat");
+                   connect.addHandler(on_message, null, "message", "groupchat");
+                   connect.addHandler(_notificationReceived, null, "message", "chat");
+                     
+				   console.log("handlers added");
+
+
+				 		
+				   function on_presence(presence) {
  
                         // handle presence
 						console.log("presence");	
-						console.log(presence);
                         return true
  
                     } // end of presence
@@ -88,7 +110,7 @@ angular
 						
 						var from = message.getAttribute('from');
 						var clientJid = Strophe.getBareJidFromJid(from); 
-                   
+                   		 if(!$rootScope.messages[clientJid]) $rootScope.messages[clientJid] = [];
 						
 						if(composing.length>0) {
 							console.log("composing");
@@ -130,7 +152,7 @@ angular
 					console.log(type);
 					var elems = message.getElementsByTagName('body');
 					var clientJid = Strophe.getBareJidFromJid(from); 
-					if (type == "chat" || type == 'groupchat' && elems.length > 0) {
+					if (type == "chat" && elems.length > 0) {
 					var body = elems[0];
 					
 					var text = Strophe.getText(body);
@@ -140,11 +162,40 @@ angular
 					 array.jid = clientJid;
 					 array.text = text;
 					 $rootScope.$apply(function() {
-
-					 	if(type == "chat") {$rootScope.messages[clientJid].push(array);}
-					 	else if (type == 'groupchat') {$rootScope.messages[self.roomJid].push(array);}
-					
+					 if(!$rootScope.messages[clientJid]) $rootScope.messages[clientJid] = [];
+					 $rootScope.messages[clientJid].push(array);
+					 
+						$ionicScrollDelegate.resize();
 						$ionicScrollDelegate.scrollBottom(true);
+					  });
+					 
+                        // handle incoming messages
+                        // I have an array $rootScope.messages which is available throghout the whole app.
+                    }    // e.g. $rootScope.messages.push(message);
+
+
+                    else if (type == "groupchat" && elems.length > 0) {
+					var body = elems[0];
+					
+					var senderJid = Strophe.getResourceFromJid(from);
+					var mucJid =   Strophe.getNodeFromJid(from) + "@"+ Strophe.getDomainFromJid(from);
+					console.log(mucJid);
+				
+					var text = Strophe.getText(body);
+					
+					 console.log("E' arrivato un messaggio da: "+from+"/n"+"Testo: "+text	);
+					 var array = {};
+					 var sender = Chats.getByJID(senderJid);
+					 array.jid = senderJid;
+					 array.name = sender.name;
+					 array.text = text;
+					 $rootScope.$apply(function() {
+					 
+					 $rootScope.messages[mucJid].push(array);
+					 console.log($rootScope.messages[mucJid]);
+					 $ionicScrollDelegate.resize();
+					 $ionicScrollDelegate.scrollBottom(true);
+
 					  });
 					 
                         // handle incoming messages
@@ -157,13 +208,7 @@ angular
 						
 						
 						
-                    
-						
-			
-            }
-        })
- 
-    },
+                    },
 	
 			 disconnect:  function() {
 				var connect = self.global_connect;
@@ -270,106 +315,7 @@ angular
 				console.log("start registering");
 				connect.register.connect('klub.com', callback, 60, 1);
 				 
-			 },
-
-			 
-			 
-			  addHandlers: function() {
-				 		
-				 	  
-                      
-						
-						
-						// "Hooks"
- 
-                function on_presence(presence) {
- 
-                        // handle presence
-						console.log("presence");	
-						console.log(presence);
-                        return true
- 
-                    } // end of presence
-					
-					
-					function _notificationReceived(message) {
-						var paused = message.getElementsByTagName('paused');
-						var composing = message.getElementsByTagName('composing');
-						
-						var from = message.getAttribute('from');
-						var clientJid = Strophe.getBareJidFromJid(from); 
-                   
-						
-						if(composing.length>0) {
-							console.log("composing");
-							
-							if(!$rootScope.messages.composing) {
-								
-									 var array = {};
-									 array.jid = clientJid;
-									 array.text = "Sto scrivendo...";
-									 array.text.composing = 1;
-									 $rootScope.$apply(function() {
-										$rootScope.messages[clientJid].push(array);
-										$ionicScrollDelegate.scrollBottom(true);
-									  });	
-								
-								$rootScope.messages.composing = true;
-							}
-						}
-						
-						else if(paused.length>0) {
-							console.log($rootScope.messages[clientJid].length);
-							console.log("paused composing");
-							$rootScope.$apply(function() {
-							$rootScope.messages[clientJid].splice(($rootScope.messages[clientJid].length-1), 1 );
-							});
-							$rootScope.messages.composing = false;
-						}
-						
-                        return true
- 
-                    } 
- 
- 
-                function on_message(message) {
-					
-					var to = message.getAttribute('to');
-					var from = message.getAttribute('from');
-					var type = message.getAttribute('type');
-					console.log(type);
-					var elems = message.getElementsByTagName('body');
-					var clientJid = Strophe.getBareJidFromJid(from); 
-					if (type == "chat" || type == 'groupchat' && elems.length > 0) {
-					var body = elems[0];
-					
-					var text = Strophe.getText(body);
-					
-					 console.log("E' arrivato un messaggio da: "+from+"/n"+"Testo: "+text	);
-					 var array = {};
-					 array.jid = clientJid;
-					 array.text = text;
-					 $rootScope.$apply(function() {
-
-					 	if(type == "chat") {$rootScope.messages[clientJid].push(array);}
-					 	else if (type == 'groupchat') {$rootScope.messages[self.roomJid].push(array);}
-					
-						$ionicScrollDelegate.scrollBottom(true);
-					  });
-					 
-                        // handle incoming messages
-                        // I have an array $rootScope.messages which is available throghout the whole app.
-                    }    // e.g. $rootScope.messages.push(message);
- 
-                        return true
- 
-                    } // end of on_messsage
-						
-						
-						
-                    }
-	
-	
+			 }
 			
 	
  }
@@ -412,17 +358,17 @@ angular
   var chats = [{
     id: 0,
     name: 'Fabio Cingolani',
-	jid: 'vahn',
+	jid: 'vahn@klipzapp.com',
     face: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
   }, {
     id: 1,
     name: 'Alessandro Lambiase',
-    jid: 'alessandro',
+    jid: 'alessandro@klipzapp.com',
     face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
   }, {
     id: 2,
     name: 'Giulia Buccomino',
-    jid: 'giulia',
+    jid: 'giulia@klipzapp.com',
     face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
   }];
 
@@ -456,3 +402,4 @@ angular
 })
 	
 	;
+

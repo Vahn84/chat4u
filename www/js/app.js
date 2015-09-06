@@ -9,7 +9,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 .run(function($ionicPlatform, $rootScope, $window, xmpp, UserLocation) {
 	
 
- 
+   $rootScope.isLogginIn = true;
 
 	 $rootScope.messages = {}; 
 	 $rootScope.messages.composing = false; 

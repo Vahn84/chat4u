@@ -351,7 +351,7 @@ angular.module('starter.controllers', [])
 
 	$scope.isBusinessOwner = function(){
 
-		return ($scope.title=="Vigor Perconti" && $window.localStorage['myId']==28) ? true : false
+		return ($scope.title=="Vigor Sporting Center" && $window.localStorage['myId']==28) ? true : false
 	}
 
    $scope.joinChat = function(room) {

@@ -121,13 +121,17 @@ button.ion-android-send.footer-btn{
 
 
 
-ion-content#iscritti .item.active, .item.activated, .item-complex.active .item-content, .item-complex.activated .item-content, .item .item-content.active, .item .item-content.activated {
+ion-content#iscritti .item.active, ion-content#iscritti .item.activated,
+ion-content#iscritti .item-complex.active .item-content,
+ion-content#iscritti .item-complex.activated .item-content,
+ion-content#iscritti .item .item-content.active, 
+ion-content#iscritti .item .item-content.activated {
   background-color: #fff; }
 
 
 ion-content#iscritti  .item,
-.item-complex .item-content,
-.item-radio .item-content {
+ion-content#iscritti .item-complex .item-content,
+ion-content#iscritti .item-radio .item-content {
   background-color: #fff; }
 
 

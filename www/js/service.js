@@ -48,19 +48,99 @@ angular
 						
 						 //add "Hooks", or Listeners if you will
 
-					$window.localStorage['jid'] = jid;
+					    $window.localStorage['jid'] = jid;
 						$rootScope.myJID = $window.localStorage['jid'];
 						$window.localStorage['pwd'] = pwd;
 						$rootScope.myPWD = $window.localStorage['pwd'];
 
+						if($window.localStorage['myId']==null) {
+
+						  var nickname = Strophe.getNodeFromJid(jid); 	
+						  
+						  User.get({nickname: nickname}, function(response) {
+
+						  		$window.localStorage['myId']= response.user.pk_user;
+						  		console.log(response);
+						  		
+						  });
+						}
+
+						$state.go('app.home');  
 					  
 						
 					  self.addHandlers();
 
 					  connect.send($pres());
+					  
 
-					  if($rootScope.isLogginIn) { $state.go('app.home');  $rootScope.isLogginIn = false;}
+				 	  self.global_connect = connect;
+				 	  
+                      
 						
+						
+						// "Hooks"
+ 
+              
+						
+						
+						
+                    
+						
+			
+            }
+        })
+ 
+    },
+
+
+    resumeConnection: function(jid, pwd, sid, rid) {
+				self = this;
+				
+				connect = new Strophe.Connection('http://klipzapp.com:7070/http-bind/');
+ 				
+ 				console.log("before connect.connect");	
+                connect.connect(jid, pwd, function(status) {
+ 				
+                    if (status === Strophe.Status.ATTACHED) {
+						console.log("attached");
+                        //add "Hooks", or Listeners if you will
+                        
+                        connect.addHandler(on_presence, null, "presence");
+                        connect.addHandler(on_message, null, "message", "chat");
+
+ 
+                        connect.send($pres());
+						
+     
+						
+ 
+                    } else if (status === Strophe.Status.AUTHENTICATING) {
+                        console.log("AUTHENTICATING");
+                    } else if (status === Strophe.Status.AUTHFAIL) {
+                        console.log("AUTHFAIL");
+                    } else if (status === Strophe.Status.CONNECTING) {
+                        console.log("CONNECTING");
+                        console.log(jid+" "+pwd);	
+                    } else if (status === Strophe.Status.DISCONNECTED) {
+                        console.log("DISCONNECTED");
+                    }
+					
+					else if (status === Strophe.Status.CONNECTED) {
+					
+						
+                        console.log("CONNECTED");
+						
+						 //add "Hooks", or Listeners if you will
+
+					    $window.localStorage['jid'] = jid;
+						$rootScope.myJID = $window.localStorage['jid'];
+						$window.localStorage['pwd'] = pwd;
+						$rootScope.myPWD = $window.localStorage['pwd'];
+
+					  self.addHandlers();
+
+					  connect.send($pres());
+					  
 
 				 	  self.global_connect = connect;
 				 	  
@@ -218,10 +298,10 @@ angular
 	},
 	
 	
-			register: function(email, password, nome, cognome, nickname, state) {
-				var connect = self.global_connect;
+			register: function(email, password, nome, cognome, nickname) {
+				
 				self = this;
-				state = state;
+				
 				var user = {
 					
 					nome: nome,
@@ -233,8 +313,7 @@ angular
 				}
 				
 				console.log(user);
-				
-				if(!connect)
+
 				connect = new Strophe.Connection('http://klipzapp.com:7070/http-bind/');
 				console.log(connect); 
 				
@@ -252,10 +331,10 @@ angular
 					connect.register.fields.plainPassword = user.password;
 					connect.register.fields.password = user.password;
 					connect.register.fields.name = user.nome+" "+user.cognome;
-					connect.register.fields.email = user.nickname+"@klub.com";
+					connect.register.fields.email = user.email;
 					// calling submit will continue the registration process
 					connect.register.submit();
-					console.log(self.connect); 
+					 
 				} else if (status === Strophe.Status.REGISTERED) {
 					console.log("registered!");
 					
@@ -269,6 +348,8 @@ angular
 					$rootScope.myJID = $window.localStorage['jid'];
 					$window.localStorage['pwd'] = user.password;
 					$rootScope.myPWD = $window.localStorage['pwd'];	
+					$window.localStorage['myId'] = data.lastId;
+					$rootScope.myID = $window.localStorage['myId'];
 
 					self.global_connect = connect;	
 
@@ -323,12 +404,17 @@ angular
 	})
 
 	.factory('User', function($resource) {
-	  return $resource('http://klipzapp.com/klub/v1/user');
+	  return $resource('http://klipzapp.com/klub/v1/user/:nickname');
 	})
 	
 	.factory('UserLocation', function($resource) {
 	  return $resource('http://klipzapp.com/klub/v1/location');
 	})
+
+	.factory('ListAroundMe', function($resource) {
+	  return $resource('http://klipzapp.com/klub/v1/aroundme/:latitude/:longitude/:pk_user');
+	})
+	
 	
 	.factory('broadcast', function ($rootScope, $document) {
     var _events = {
@@ -356,20 +442,29 @@ angular
 
   // Some fake testing data
   var chats = [{
-    id: 0,
+    id: 14,
     name: 'Fabio Cingolani',
 	jid: 'vahn@klipzapp.com',
-    face: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
+	type: 'business',
+    face: 'img/avatar/1.png'
   }, {
-    id: 1,
+    id: 27,
     name: 'Alessandro Lambiase',
     jid: 'alessandro@klipzapp.com',
-    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+    type: 'business',
+    face: 'img/avatar/3.png'
   }, {
-    id: 2,
+    id: 25,
     name: 'Giulia Buccomino',
     jid: 'giulia@klipzapp.com',
-    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+    type: 'user',
+    face: 'img/avatar/4.png'
+  }, {
+    id: 28,
+    name: 'Matteo Perconti',
+    jid: 'matteo@klipzapp.com',
+    type: 'business',
+    face: 'img/avatar/1.png'
   }];
 
   return {

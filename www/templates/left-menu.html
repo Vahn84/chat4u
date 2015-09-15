@@ -5,7 +5,7 @@
         <ion-item menu-close class="left-menu-cell">
          <div class="item">
           
-            <img src="img/home/avatar.png" style="width:75px; height: auto" ng-click="goToProfile(0)">
+            <img src="{{myContact.face}}" style="width:75px; height: auto" ng-click="goToMyProfile()">
     
          </div>
         </ion-item>
@@ -48,6 +48,15 @@
          </ion-item>
 
           <ion-item menu-close class="left-menu-cell">
+        <div class="item">
+         <a class="button button-icon"  ng-click="goTo('app.mypages')">
+           <i class="icon ion-flag my-icon" ></i>
+           <span style="font-size:15px">Pagine</span>
+         </a>
+         </div>
+         </ion-item>
+
+          <ion-item menu-close class="left-menu-cell">
          <div class="item">
          <a class="button button-icon"  ng-click="goTo('app.settings')">
            <i class="icon ion-android-options my-icon" ></i>
@@ -58,7 +67,7 @@
 
         <ion-item menu-close class="left-menu-cell">
          <div class="item">
-         <a class="button button-icon">
+         <a class="button button-icon" ng-click="logOut()">
            <i class="icon ion-android-exit my-icon" ></i>
            <span style="font-size:15px">Esci</span>
          </a>

@@ -17,7 +17,7 @@ background: #ededed;
 
 .item-complex .item-content, .item-radio .item-content {
 padding-right:16px;
-background-color: transparent;
+
 }
 
 #chat_detail .item { 
@@ -72,6 +72,7 @@ float:right;
 
 ion-header-bar.bar.bar-header {
 background:#4abc8f;
+box-shadow: none;
 }
 
 

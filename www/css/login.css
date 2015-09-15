@@ -1,13 +1,20 @@
-.login .scroll-content {
-  display: table !important;
-  width: 100% !important;
-  height: 100% !important;
+
+.login ion-content div.scroll {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    align-items: center;
+     display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    padding: 5px;
+    width: 100%;
 }
-.login .scroll {
-  display: table-cell;
-  vertical-align: middle;
-  text-align: center;
-}
+
 
 .login{
 background: url("../img/login/greenbg.jpg") no-repeat 0 0;
@@ -19,7 +26,7 @@ text-align:center;
 }
 
 .login img.logo{
-width:30%;
+width:45%;
 position:relative;
 margin: 0 auto;
 
@@ -32,7 +39,7 @@ position:relative;
 margin: 0 auto;
 }
 
-.item {
+.login .item {
 background: transparent;
 border-color: transparent;
 color:#50B68D;
@@ -78,4 +85,13 @@ color:#fff;
 font-size:25px;
 font-weight: 100;
 border-color: transparent;
+}
+
+ion-view.login .tools-button img{
+margin-left: 10px;
+margin-right: 10px;
+width: 50px; 
+height: 50px; 
+display:inline-block;
+position: relative;
 }

@@ -4,18 +4,32 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova', 'ngResource'])
+angular.module('starter', ['ionic', 'ionic-material', 'starter.controllers', 'starter.services', 'ngCordova', 'ngResource'])
 
-.run(function($ionicPlatform, $rootScope, $window, xmpp, UserLocation) {
+.run(function($ionicPlatform, $rootScope, $window, xmpp, UserLocation, Chats, $cordovaStatusbar) {
 	
 
-   $rootScope.isLogginIn = true;
+   
+
+   if(!$window.localStorage['myLastKnownLatitude']) {
+
+       $window.localStorage['myLastKnownLatitude'] = 41.9025026;
+        $window.localStorage['myLastKnownLongitude'] = 12.4964589;
+   }
+    
+  
+   
+
 
 	 $rootScope.messages = {}; 
 	 $rootScope.messages.composing = false; 
+
+   console.log("localStorage['jid']",$window.localStorage['jid']);
+
 	 ( $window.localStorage['jid']!=null) ?  $rootScope.myJID = $window.localStorage['jid']: $rootScope.myJID = ""; 
    ( $window.localStorage['pwd']!=null) ?  $rootScope.myPWD = $window.localStorage['pwd']: $rootScope.myPWD = ""; 
 	 
+    console.log("$rootScope.myJID",$rootScope.myJID);
 	
   $ionicPlatform.ready(function() {
 
@@ -23,9 +37,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
        xmpp.disconnect();
       console.log("pausa");
       }, false);
+
+      document.addEventListener("resign", function() {
+       xmpp.disconnect();
+      console.log("pausa");
+      }, false);
+
       document.addEventListener("resume", function() {
       console.log("resumo - user: "+$rootScope.myJID+", pwd: "+$rootScope.myPWD);
-      xmpp.auth($rootScope.myJID,$rootScope.myPWD, null, null);  
+      xmpp.resumeConnection($rootScope.myJID,$rootScope.myPWD, null, null, null);  
       }, false);
 
 	  
@@ -62,20 +82,28 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         // Do your HTTP request here to POST location to your server.
         //
         //
-        console.log(location);
-   
-        UserLocation.save({},location, 
+        console.log(location.latitude);
+
+     
+        
+        if($window.localStorage['myId']){
+        var userLocation = {latitude: location.latitude, longitude: location.longitude, user_fk: $window.localStorage['myId']};
+
+        UserLocation.save({},userLocation, 
           
           function(data){
             console.log(data);
+
+            $window.localStorage['myLastKnownLatitude'] = location.latitude;
+            $window.localStorage['myLastKnownLongitude'] = location.longitude;
           },
 
           function(error){
-              console.log(location + " - "+ error);
+              console.log(userLocation + " - "+ error);
           });
 
 
-    
+    }
 
 
         yourAjaxCallback.call(this);
@@ -106,17 +134,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
 
 
-
-
 	
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins.Keyboard) {
+            cordova.plugins.Keyboard.disableScroll(true);
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
     }
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
+      $cordovaStatusbar.styleHex('#00A099') //red
     }
   });
 })
@@ -181,7 +209,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
 
  .state('app.userprofile', {
-    url: "/userprofile/:userId",
+    url: "/userprofile/:contactId",
   views: {
    'singleContent': {
     templateUrl: "templates/user-profile.html",
@@ -197,6 +225,54 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     templateUrl: "templates/vendor-profile.html",
     controller: 'VendorProfileCtrl'
     }
+  },
+  params: {'titolo': null, 'uId': null},
+})  
+
+  .state('app.personalizzaVendor', {
+    url: "/vendorprofile/personalizzaVendor",
+  views: {
+   'singleContent': {
+    templateUrl: "templates/personalizzaVendor.html",
+    controller: 'CstmzeVendorProfileCtrl'
+    }
+  }
+}) 
+  .state('app.statisticheVendor', {
+    url: "/vendorprofile/statisticheVendor",
+  views: {
+   'singleContent': {
+    templateUrl: "templates/statisticheVendor.html",
+    controller: 'CstmzeVendorProfileCtrl'
+    }
+  }
+}) 
+  .state('app.nuovaComVendor', {
+    url: "/vendorprofile/nuovaComVendor",
+  views: {
+   'singleContent': {
+    templateUrl: "templates/nuovaComVendor.html",
+    controller: 'CstmzeVendorProfileCtrl'
+    }
+  }
+}) 
+  .state('app.utentiVendor', {
+    url: "/vendorprofile/utentiVendor",
+  views: {
+   'singleContent': {
+    templateUrl: "templates/utentiVendor.html",
+    controller: 'UtentiVendorProfileCtrl'
+    }
+  }
+})  
+
+  .state('app.nuovoEventoVendor', {
+    url: "/vendorprofile/nuovoEventoVendor",
+  views: {
+   'singleContent': {
+    templateUrl: "templates/nuovoEventoVendor.html",
+    controller: 'CstmzeVendorProfileCtrl'
+    }
   }
 })  
 
@@ -210,6 +286,70 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
   }
 })  
+
+
+ .state('app.eventi', {
+    url: "/eventi",
+  views: {
+   'singleContent': {
+    templateUrl: "templates/eventi.html",
+    controller: 'EventiCtrl'
+    }
+  }
+})  
+
+
+ .state('app.notifiche', {
+    url: "/notifiche",
+  views: {
+   'singleContent': {
+    templateUrl: "templates/notifiche.html",
+    controller: 'NotificheCtrl'
+    }
+  }
+})  
+
+  .state('app.mypages', {
+    url: "/mypages",
+  views: {
+   'singleContent': {
+    templateUrl: "templates/mypages.html",
+    controller: 'MyPagesCtrl'
+    }
+  }
+})  
+
+ .state('app.settings', {
+    url: "/settings",
+  views: {
+   'singleContent': {
+    templateUrl: "templates/settings.html",
+    controller: 'SettingsCtrl'
+    }
+  }
+})  
+
+ .state('app.settingschat', {
+    url: "/settings/settings-chat",
+  views: {
+   'singleContent': {
+    templateUrl: "templates/settings-chat.html",
+    controller: 'SettingsCtrl'
+    }
+  }
+})  
+
+.state('app.evento', {
+    url: "/evento",
+  views: {
+   'singleContent': {
+    templateUrl: "templates/evento.html",
+    controller: 'EventoCtrl'
+    }
+  }
+})  
+
+
   
   .state('login', {
     url: "/login",
@@ -226,4 +366,26 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   ;
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
-});
+})
+
+
+.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+    $ionicConfigProvider.backButton.previousTitleText(false).text('');
+
+  
+})
+
+.directive('ngLastRepeat', function ($timeout) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attr) {
+            if (scope.$last === true) {
+                $timeout(function () {
+                    scope.$emit('ngLastRepeat'+ (attr.ngLastRepeat ? '.'+attr.ngLastRepeat : ''));
+                });
+            }
+        }
+    }
+})
+
+;

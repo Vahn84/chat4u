@@ -15,28 +15,91 @@
  <div class="row" style="padding:0;">
   <div id="vendor-profile-bg" class="col">
 
-  			<img class="avatar" src="img/home/avatar.png">
-  			<h2>La Palestra</h2>
+  			<img class="avatar" src="img/home/avatar.png" style="left:0">
+  			<h2>{{title}}</h2>
   			<p style="margin:0">"Fortuna vitrea est; tum cum splendet, fru..."</p>
         
         <div class="row" style="text-align:center"><div class="col-75" style="margin:0 auto; display:inline-block">
 
-        <a class="item item-icon-left" href="#" style="color:#fff !important; padding-left: 40px; left: 30px;">
-          <i class="icon ion-android-pin" style="font-size:"></i>
-         Piazza Novecento 32, Roma
+        <a class="item item-icon-left" href="#" style="color:#fff !important; line-height:18px; font-size:18px;  padding-left:20px;">
+          <i class="icon ion-android-pin" style="font-size:18px; padding-right:6px;"></i>
+          Via Grotta di Gregna 100, Roma
 
        </a></div></div>
+
+
+        <div class="tools-button text-center" style="text-align:center; position:relative;">
+
+        <img src="img/profile/chat.png" ng-click="joinChat('palestra')">
+        <img ng-hide="isBusinessOwner()" src="img/profile/vote.png" >
+        <img src="img/profile/foto.png" >
+        <img ng-show="isBusinessOwner()" ng-click="modal.show()" src="img/profile/option2.png" >
+    </div>
  
   </div>
 </div>
 
+ 
 
-<div class="row padding"  style="padding-top:20px;">
+<div class="row"  style="background:#317D91; color:#fff">
 <div class="col" > 
-<p>Il Pub, lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-Integer id malesuada tellus. Integer rhoncus magna rutrum ante 
-interdum, nec iaculis purus luctus. Pellentesque eget massa augue. 
-Fusce hendrerit lacus ac orci elementum semper.</p>
+ <a class="item item-icon-left" href="#/evento" style="color:#fff !important; padding-left: 60px; margin-left: -15px;">
+          <i class="icon ion-android-calendar" style="font-size:"></i>
+         Evento in programma: Aperitivo “Summer Event”<br>
+         <small>22 Luglio 2015 alle ore 21:30</small>
+
+       </a>
+</div>
+</div>
+
+
+<div class="row" style="background:#DADADA" ng-click="toggleGroup(group)" ng-class="{active: isGroupShown(group)}">
+
+<div class="item item-icon-left" style="padding-left: 60px; margin-left: -15px;">
+  <i class="icon" ng-class="isGroupShown(group) ? 'ion-android-arrow-down' : 'ion-android-arrow-up'" style="color: #00A099;"></i> <h2 style="font-size: 30px;"> Contatti</h2>
+
+</div>
+
+</div>
+
+<div  class="row" ng-hide="isGroupShown(group)" style="background:#DADADA">
+<div class="list padding" >
+
+  <a class="item item-icon-left" href="#" style="padding-left:50px;">
+    <i class="icon ion-android-time" style="left:5px;"></i>
+    Aperto dal Lunedi al Sabato
+  </a>
+
+  <a class="item item-icon-left" href="#" style="padding-left:50px;">
+    <i class="icon ion-android-call" style="left:5px;"></i>
+    06 35 26 234
+  </a>
+
+  <a class="item item-icon-left" href="#" style="padding-left:50px;">
+    <i class="icon ion-android-globe" style="left:5px;"></i>
+  www.vigorsportingcenter.it
+  </a>
+
+  <a class="item item-icon-left" href="#" style="padding-left:50px;">
+    <i class="icon ion-android-mail" style="left:5px;"></i>
+    info@vigorsportingcenter.it
+  </a>
+
+
+<a class="item" ><p>Vigor Sporting Center è ideale per i piccoli, con la scuola calcio, le piscine e i corsi dedicati, e perfetto per i grandi, grazie all’infinita varietà di attività praticabili. Siamo aperti anche a luglio e agosto: troverai il bar all’aperto e la piscina scoperta (anche la domenica). Potrai giocare a pallavolo, racchettoni, mini calcio, mini tennis, mini basket e tanto altro ancora, tutto con un unico biglietto giornaliero. Vieni a trovarci, scoprirai un ampio parcheggio gratuito e formule di abbonamento studiate per ogni esigenza.</p></a>
+ 
+</div>
+
+ 
+
+</div>
+
+
+
+
+<!-- <div class="row padding"  style="padding-top:20px;">
+<div class="col" > 
+
 </div>
 </div>
 
@@ -45,19 +108,60 @@ Fusce hendrerit lacus ac orci elementum semper.</p>
 <div class="col" style="text-align:center"> 
 <button id="joinChat" class="button icon-left ion-chatboxes" style="display:inline-block" ng-click="joinChat('palestra')">Entra nella chat di gruppo</button>
 </div>
+</div> -->
+
+<div class="row padding"  style="padding-top:20px;"><div class="col" > </div></div>
+
+
+<div class="row" style="padding-left:10px; padding-right:10px;">
+ <h2>Comunicazioni</h2>
 </div>
 
-<div class="row padding">
- <h2>Partecipanti</h2>
+
+<div id="comunicazioni" class="list card" style="padding-left:10px; padding-right:10px;">
+
+  <div class="row row-center">
+
+  <div class="item item-avatar col-75" style="padding-left: 68px;  padding-top: 18px; padding-bottom: 0;  min-height: 20px;">
+    <img src="img/home/avatar.png">
+    <h2>La Palestra</h2>
+    <p>November 05, 1955</p>
+  </div>
+
+  <div ng-show="isBusinessOwner()" class="col-25  text-right" style="padding-right:14px; font-size:18px;">
+     <a href="#" class="subdued"><i class="icon ion-android-create"></i></a>
+      <a href="#" class="subdued"><i class="icon ion-android-delete"></i></a>
+  </div>
+
 </div>
 
-<div id="friends" class="row padding">
+  <div class="item item-body" style="padding-top:0">
+    <p style="margin-top:0">
+      This is a "Facebook" styled Card. The header is created from a Thumbnail List item,
+      the content is from a card-body consisting of a paragraph text. The footer
+      consists of tabs, icons aligned left, within the card-footer.
+    </p>
+ 
+  </div>
+
+
+
+</div>
+
+
+<div class="row padding"  style="padding-top:20px;"><div class="col" > </div></div>
+
+<div class="row" style="padding-left:10px; padding-right:10px;">
+ <h2>Iscritti</h2>
+</div>
+
+<div id="friends" class="row" style="padding-left:10px; padding-right:10px;">
   <div class="col"><a class="item item-avatar" href="#"><img src="img/home/avatar.png"></a></div>
   <div class="col"><a class="item item-avatar" href="#"><img src="img/home/avatar.png"></a></div>
   <div class="col"><a class="item item-avatar" href="#"><img src="img/home/avatar.png"></a></div>
   <div class="col"><a class="item item-avatar" href="#"><img src="img/home/avatar.png"></a></div>
   <div class="col"><a class="item item-avatar" href="#"><img src="img/home/avatar.png"></a></div>
-  <div class="col"><a class="item item-avatar" href="#"><img src="img/home/avatar.png"></a></div>
+  <div class="col"><a class="item item-avatar" href="#"><img src="img/profile/more.png"></a></div>
  </div>
 
 </ion-content>

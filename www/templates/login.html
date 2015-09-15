@@ -1,6 +1,8 @@
 <ion-view class="login">
  
-  <ion-content >
+  <ion-content class="row row-center">
+
+    <div class="col col-center text-center">
   <img src="img/login/logo_big.png" class="logo"/>
   
     <form ng-submit="doLogin()">
@@ -13,8 +15,12 @@
           <span class="input-label">password</span>
           <input type="password"  placeholder="password" ng-model="loginData.password">
         </label>
-        <label class="item">
-          <button class="button button-block login_button" type="submit">LOGIN</button>
+        <label class="item" style=" min-height: 80px;     text-align: center;">
+          <button class="button button-clear tools-button" type="submit" style=" min-height: 80px; ">
+              
+              <img src="img/login-i.png">
+
+            </button>
         </label>
 		 <label class="item">
 	
@@ -23,10 +29,11 @@
 	 
 	  </form>
 	
-	<form>
-	 <a class="button button-block register_button" ng-click="goRegister()">REGISTRATI</a>
-	</form>	
+		
 	
-    
+    </div>
+
   </ion-content>
+
+  <ion-footer-bar class="bar-clear text-center"><p style="color:#fff; font-size: 14px; font-weight: bold;width: 100%;">Non hai un account? Registrati</p></ion-footer-bar>
 </ion-view>

@@ -15,9 +15,18 @@
  <div class="row" style="padding:0;">
   <div id="profile-bg" class="col">
 
-  			<img class="avatar" src="img/home/avatar.png">
-  			<h2>Fabrizio Bizzarri</h2>
+  			<img class="avatar" src="{{contact.face}}">
+  			<h2>{{contact.name}}</h2>
   			<p>"Fortuna vitrea est; tum cum splendet, fru..."</p>
+
+         <div class="tools-button text-center" style="text-align:center; position:relative;">
+
+        <img ng-hide="isProfileOwner()" src="img/profile/chat.png" ng-click="chatWithHim(contact.id)">
+        <img ng-hide="isProfileOwner()" src="img/profile/add.png"  ng-click="openModal(2)">
+        <img src="img/profile/foto.png" >
+        <img ng-hide="isProfileOwner()" src="img/profile/vote.png" >
+        <img ng-show="isProfileOwner()" ng-click="openModal(1)" src="img/profile/option2.png" >
+    </div>
 
   </div>
 </div>
@@ -48,7 +57,7 @@
 
 </div>
 
-<div class="list padding" style="background:#DADADA">
+<div class="list padding" style="background:#EAEAEA">
 <h2>Contatti</h2>
 
   <a class="item item-icon-left" href="#">
@@ -65,11 +74,11 @@
 </div>
 
 
-<div class="row padding">
+<div class="row">
  <h2>Hobby</h2>
 </div>
 
-<div id="hobby" class="row padding">
+<div id="hobby" class="row ">
  <div class="col">
  	<ul>
  		<li>Serie Tv</li>
@@ -82,11 +91,11 @@
  </div>
 </div>
 
-<div class="row padding">
+<div class="list" style="background:#EAEAEA; padding-left: 16px; padding-right: 16px; padding-top:10px;" >
  <h2>Amici</h2>
-</div>
 
-<div id="friends" class="row padding">
+
+<div id="friends" class="row ">
   <div class="col"><a class="item item-avatar" href="#"><img src="img/home/avatar.png"></a></div>
   <div class="col"><a class="item item-avatar" href="#"><img src="img/home/avatar.png"></a></div>
   <div class="col"><a class="item item-avatar" href="#"><img src="img/home/avatar.png"></a></div>
@@ -94,6 +103,7 @@
   <div class="col"><a class="item item-avatar" href="#"><img src="img/home/avatar.png"></a></div>
   <div class="col"><a class="item item-avatar" href="#"><img src="img/home/avatar.png"></a></div>
  </div>
+</div>
 
 </ion-content>
 </ion-view>

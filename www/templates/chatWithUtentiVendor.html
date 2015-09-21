@@ -1,0 +1,31 @@
+<ion-view view-title="CHATTA CON GLI ALTRI ISCRITTI" animation="slide-right-left">
+
+<ion-nav-bar align-title="center" class="gradient-background">
+
+
+   <ion-nav-back-button class="bar-custom-color" >
+      <i class="ion-ios-arrow-back" style="padding-left:8px"></i>
+    </ion-nav-back-button>
+      
+      
+    
+    </ion-nav-bar>
+
+
+
+
+ <ion-content id="iscritti" class="padding">
+
+
+   <ion-list can-swipe="true">
+                     <ion-item ng-repeat="chat in chats_recenti" ng-click="goToProfile(chat.type)" class="contact-item ink item-avatar" style="padding:0" >
+                      <img ng-src="img/home/avatar.png" style="max-width:60px; max-height:60px; left: 0px">
+                       <h2 style="font-family: Roboto; font-size:20px;">{{chat.name}}</h2>
+                        <p style="color:#9C9B9B">{{chat.last_chat}}</p>
+                           
+                    </ion-item>
+                  </ion-list>
+ 		
+
+ </ion-content>
+</ion-view>

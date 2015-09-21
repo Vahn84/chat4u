@@ -1,11 +1,14 @@
 <ion-view >
   <ion-content style="background:#332F3F; color:#ffff" >
    
-      <ion-list>
+      <ion-list id="leftMenu">
         <ion-item menu-close class="left-menu-cell">
          <div class="item">
+            <a class="button button-icon"  ng-click="goToMyProfile()" style="  min-height: 90px;">
+           <img src="{{myContact.face}}" >
+           <span style="font-size:15px">Profilo</span>
+         </a>
           
-            <img src="{{myContact.face}}" style="width:75px; height: auto" ng-click="goToMyProfile()">
     
          </div>
         </ion-item>
@@ -52,6 +55,16 @@
          <a class="button button-icon"  ng-click="goTo('app.mypages')">
            <i class="icon ion-flag my-icon" ></i>
            <span style="font-size:15px">Pagine</span>
+         </a>
+         </div>
+         </ion-item>
+
+
+          <ion-item menu-close class="left-menu-cell">
+        <div class="item">
+         <a class="button button-icon"  ng-click="">
+           <i class="icon ion-android-lock my-icon" ></i>
+           <span style="font-size:15px">Privati</span>
          </a>
          </div>
          </ion-item>

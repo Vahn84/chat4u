@@ -51,6 +51,10 @@ ion-nav-bar#home-nav ion-nav-buttons  .hide {
 display: block !important;  
 }
 
+.bar .buttons-left span {
+   line-height: 54px;
+}
+
 .button {
   box-shadow:none;
 }
@@ -116,6 +120,16 @@ button.ion-android-send.footer-btn{
 .button-outline.button-outline.annulla {
   border-color: rgba(157,157,156, 1);
   color:#9D9D9C;
+}
+
+.center-logo{
+  height: 30px; 
+  width: 30px; 
+  z-index:10000; 
+  left:50%; 
+  margin-left:-15px; 
+  top:10px;
+  position:absolute;
 }
 
 
@@ -204,8 +218,9 @@ position: relative;
 /*LEFT MENU ----------------------------------------------------*/
 
 .my-icon:before, .my-icon {
-    font-size: 50px !important;
+    font-size: 40px !important;
     display: block !important;
+    line-height: 29px;
 }
 
 
@@ -231,8 +246,18 @@ position: relative;
 .left-menu-cell .item a{ 
  color:#fff;
  padding: 0;
-min-height: 80px;
+  min-height: 70px;
 	}
+
+  .left-menu-cell .item .button {
+    font-weight: 300;
+  }
+
+.left-menu-cell .item a img {
+  width:55px; 
+  height: auto;
+  display:block;
+}
 
 
 ion-slide ion-content.has-header {

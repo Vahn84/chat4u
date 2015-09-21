@@ -9,8 +9,6 @@ angular.module('starter.controllers', [])
 	}
 })
 
-
-
 .controller('LoginCtrl', function($scope, $ionicModal, $timeout, $rootScope, xmpp, $state, $window, $ionicHistory) {
 
 
@@ -81,9 +79,13 @@ angular.module('starter.controllers', [])
 })
 
 
+// #GTA# ANCH0R:HOME-CONTROLLER ID:1442849805.386312
+
 .controller('HomeCtrl', function($scope, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, ionicMaterialInk,ionicMaterialMotion, ListAroundMe, $window) {
 	
 	var counter = 0;
+
+	$scope.Math = $window.Math;
 
 
 	$scope.data = {
@@ -103,6 +105,9 @@ angular.module('starter.controllers', [])
     pk_user: $window.localStorage['myId']}, function(response) {
 
     	angular.forEach(response.items, function(value, key) {
+    	value.likes= Math.floor((Math.random() * 100) + 1);
+    	if(value.type=="user") value.icon ="android-person";
+    	else value.icon ="flag";
 		console.log("value "+ angular.fromJson(value));
 		console.log("key "+ key);
     	  value.counter = counter;
@@ -118,7 +123,7 @@ angular.module('starter.controllers', [])
 	
 
 
- 	 $scope.goToProfile = function(type, title, id){
+$scope.goToProfile = function(type, title, id){
   	(type=="pagina") ? $state.go("app.vendorprofile", {titolo: title, uId: id}) : $state.go("app.userprofile", {titolo: title, contactId: id});
   }
 
@@ -153,9 +158,12 @@ angular.module('starter.controllers', [])
   	ListAroundMe.get({latitude: $window.localStorage['myLastKnownLatitude'], longitude: $window.localStorage['myLastKnownLongitude'], 
     pk_user: $window.localStorage['myId']}, function(response) {
 
-    		console.log(response.items);
+    	console.log(response.items);
 
     	angular.forEach(response.items, function(value, key) {
+    	value.likes= Math.floor((Math.random() * 100) + 1);	
+    	if(value.type=="user") value.icon ="android-person";
+    	else value.icon ="flag";	
 		console.log("value "+ value);
 		console.log("key "+ key);
     	  value.counter = counter;
@@ -176,10 +184,12 @@ angular.module('starter.controllers', [])
 
 })
 	
-
+// #GTA# ANCH0R:RIGHTMENU CONTACTS CONTROLLER ID:1442849979.973298
 .controller('ContactsCtrl', function($scope, Chats, $state, $window) {
 	
 	$scope.myId=$window.localStorage['myId'];
+	console.log("contacts my id " +
+		$scope.myId);
 
 	var contact_list_state=  $state.current.name;
     $scope.contacts = Chats.all();
@@ -201,6 +211,7 @@ angular.module('starter.controllers', [])
 
 
 	  $scope.myContact = Chats.get($window.localStorage['myId']);
+	 console.log("left my id " +$window.localStorage['myId']);
 
 	  $scope.goTo = function(state){ 		
 	  		$state.go(state);
@@ -278,13 +289,9 @@ angular.module('starter.controllers', [])
 	   }
 	   
 	  
-	 
-	 
-	
-	
 })
 
-
+// #GTA# ANCH0R:USER PROFILE CONTROLLER ID:1442850255.117035
 .controller('UserProfileCtrl', function($scope, Chats, $state, $stateParams, $ionicModal, $window) {
 	 console.log($stateParams.contactId);
     $scope.contact = Chats.get($stateParams.contactId);
@@ -297,7 +304,7 @@ angular.module('starter.controllers', [])
 	}
 
 
-	 $ionicModal.fromTemplateUrl('templates/airmenu.html', {
+	 $ionicModal.fromTemplateUrl('templates/user-airmenu.html', {
 	 	id: 1,
 	    scope: $scope,
 	    animation: 'fade-in'
@@ -342,10 +349,45 @@ angular.module('starter.controllers', [])
 
 })
 
+// #GTA# ANCH0R:USER PROFILE FRIENDS CONTROLLER ID:1442850620.093911
+.controller('UserProfileFriendsCtrl', function($scope, Chats, $state, $stateParams, $ionicModal, $window) {
+ 
+ $scope.chats_recenti = [ {
+    id: 1,
+    name: 'Alessandro Lambiase',
+    jid: 'alessandro',
+    last_chat: 'Fortuna vitrea est; tum cum splendet, fru...',
+    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+  },  {
+    id: 3,
+    name: 'Giulia',
+    jid: 'giulia',
+	type: 'single',
+    last_chat: 'Fortuna vitrea est; tum cum splendet, fru...',
+    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+  }, {
+    id: 1,
+    name: 'Alessandro Lambiase',
+    jid: 'alessandro',
+    last_chat: 'Fortuna vitrea est; tum cum splendet, fru...',
+    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+  },  {
+    id: 3,
+    name: 'Giulia',
+    jid: 'giulia',
+	type: 'single',
+    last_chat: 'Fortuna vitrea est; tum cum splendet, fru...',
+    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+  }];
+	
 
+
+})
+
+// #GTA# ANCH0R:VENDOR PROFILE CONTROLLER ID:1442850011.252087
 .controller('VendorProfileCtrl', function($scope, Chats, $state, $stateParams, $ionicModal, $window) {
 	
-	console.log($stateParams);
+	console.log($stateParams.uId);
 	$scope.title=$stateParams.titolo;
 	$scope.profileId = $stateParams.uId;
 
@@ -405,6 +447,46 @@ angular.module('starter.controllers', [])
 	
 
 })
+.controller('PortafoglioVendorProfileCtrl', function($scope, Chats, $state, $stateParams) {
+	
+	
+
+})
+// #GTA# ANCH0R:CHATTA CON ISCRITTI VENDOR CONTROLLER ID:1442850471.742425
+.controller('ChatWithUtentiVendor', function($scope, Chats, $state, $stateParams) {
+	
+ $scope.chats_recenti = [ {
+    id: 1,
+    name: 'Alessandro Lambiase',
+    jid: 'alessandro',
+    last_chat: 'Fortuna vitrea est; tum cum splendet, fru...',
+    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+  },  {
+    id: 3,
+    name: 'Giulia',
+    jid: 'giulia',
+	type: 'single',
+    last_chat: 'Fortuna vitrea est; tum cum splendet, fru...',
+    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+  }, {
+    id: 1,
+    name: 'Alessandro Lambiase',
+    jid: 'alessandro',
+    last_chat: 'Fortuna vitrea est; tum cum splendet, fru...',
+    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+  },  {
+    id: 3,
+    name: 'Giulia',
+    jid: 'giulia',
+	type: 'single',
+    last_chat: 'Fortuna vitrea est; tum cum splendet, fru...',
+    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+  }];
+	
+
+})
+
+// #GTA# ANCH0R:UTENTI ISCRITTI AL VENDOR CONTROLLER ID:1442850230.409622
 .controller('UtentiVendorProfileCtrl', function($scope, Chats, $state, $stateParams) {
 	
 	 $scope.chats_recenti = [ {
@@ -457,11 +539,11 @@ angular.module('starter.controllers', [])
 
 	$scope.isBusinessOwner = function(){
 
-		return ($window.localStorage['myId']==14) ? true : false;
+		return ($window.localStorage['myId']==14 || $window.localStorage['myId']==28) ? true : false;
 	}
 
 	$scope.goToProfile = function(title, id){
-  	 $state.go("app.vendorprofile", {titolo: title, uId: id});
+  	 $state.go("app.vendorprofile", {titolo: title, uId: id}) 
   }
 
 })
@@ -479,9 +561,9 @@ angular.module('starter.controllers', [])
 	  $scope.myContact = Chats.getByJID(myJID);
 
 	 //GETTING ALL CHAT CONTACTS (IT WILL BE REPLACED BY THE XMPP ROSTER)
-	 $scope.roomJid = $stateParams.room+"@conference.klipzapp.com";
+	 $scope.roomJid = "palestra@conference.klipzapp.com";
 	 var roomJid =  $scope.roomJid ;
-	 $scope.myTitle = '<a class="item item-avatar" href="#"> <img src="img/home/avatar.png"><h2>'+$stateParams.room+'</h2></a>';
+	 $scope.myTitle = '<a class="item item-avatar" href="#"> <img src="img/avatar/palestra.png"><h2>Vigor Sporting Center</h2></a>';
 	 //INITIALIZING DOM MODELS
 	 $scope.input = {};
 	 $scope.chat = {};

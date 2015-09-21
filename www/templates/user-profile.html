@@ -91,7 +91,7 @@
  </div>
 </div>
 
-<div class="list" style="background:#EAEAEA; padding-left: 16px; padding-right: 16px; padding-top:10px;" >
+<div ng-show="isProfileOwner()" class="list" style="background:#EAEAEA; padding-left: 16px; padding-right: 16px; padding-top:10px;" >
  <h2>Amici</h2>
 
 
@@ -101,7 +101,7 @@
   <div class="col"><a class="item item-avatar" href="#"><img src="img/home/avatar.png"></a></div>
   <div class="col"><a class="item item-avatar" href="#"><img src="img/home/avatar.png"></a></div>
   <div class="col"><a class="item item-avatar" href="#"><img src="img/home/avatar.png"></a></div>
-  <div class="col"><a class="item item-avatar" href="#"><img src="img/home/avatar.png"></a></div>
+  <div class="col"><a class="item item-avatar" ng-click="goTo('app.userfriends')"><img src="img/profile/more.png"></a></div>
  </div>
 </div>
 

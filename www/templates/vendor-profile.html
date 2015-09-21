@@ -29,10 +29,12 @@
 
         <div class="tools-button text-center" style="text-align:center; position:relative;">
 
-        <img src="img/profile/chat.png" ng-click="joinChat('palestra')">
+        <img src="img/profile/chat.png" ng-click="joinChat('Vigor Sporting Center')">
         <img ng-hide="isBusinessOwner()" src="img/profile/vote.png" >
         <img src="img/profile/foto.png" >
+        <img ng-show="isBusinessOwner()" ng-click="goTo('app.portafoglio')" src="img/profile/dollaro.png" >
         <img ng-show="isBusinessOwner()" ng-click="modal.show()" src="img/profile/option2.png" >
+
     </div>
  
   </div>
@@ -151,7 +153,7 @@
 <div class="row padding"  style="padding-top:20px;"><div class="col" > </div></div>
 
 <div class="row" style="padding-left:10px; padding-right:10px;">
- <h2>Iscritti</h2>
+ <h2>Chatta con gli altri scritti</h2>
 </div>
 
 <div id="friends" class="row" style="padding-left:10px; padding-right:10px;">
@@ -160,7 +162,7 @@
   <div class="col"><a class="item item-avatar" href="#"><img src="img/home/avatar.png"></a></div>
   <div class="col"><a class="item item-avatar" href="#"><img src="img/home/avatar.png"></a></div>
   <div class="col"><a class="item item-avatar" href="#"><img src="img/home/avatar.png"></a></div>
-  <div class="col"><a class="item item-avatar" href="#"><img src="img/profile/more.png"></a></div>
+  <div class="col"><a class="item item-avatar" ng-click="goTo('app.chatWithUtentiVendor')"><img src="img/profile/more.png" )"></a></div>
  </div>
 
 </ion-content>

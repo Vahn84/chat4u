@@ -26,9 +26,9 @@
 <ion-list ng-show="isBusinessOwner()">
 <ion-item class="contact-item ink item" style="padding: 0px;" can-swipe="true" ng-last-repeat="mylist">             
                       
-                        <a class="item item-avatar" ng-click="goToProfile('La Palestra', 4)">
-                             <img ng-src="img/home/avatar.png" style="max-width:60px; max-height:60px; left: 0px" src="img/home/avatar.png">
-                             <h2 style="color:#fff; font-family: Roboto; font-size:20px;" class="ng-binding">La Palestra</h2>
+                        <a class="item item-avatar" ng-click="goToProfile('Vigor Sporting Center', 1)">
+                             <img ng-src="img/avatar/palestra.png" style="max-width:60px; max-height:60px; left: 0px" src="img/avatar/palestra.png">
+                             <h2 style="color:#fff; font-family: Roboto; font-size:20px;" class="ng-binding">Vigor Sporting Center</h2>
                             <p style="color:#9C9B9B" >Lorem ipsum sit dolor amet...consectetur...</p>
                           
                           </a>
@@ -36,7 +36,9 @@
                     </ion-item>
  	</ion-list>
 
-  <p ng-hide="isBusinessOwner()">Non hai nessuna pagina associata al tuo account! <span style="color:#00A099">Passa all'Account Premium!</span></p>
+  <div class="list"  ng-hide="isBusinessOwner()">
+  <img src="img/premium.png" style="width:100%" >
 
+  </div>
  </ion-content>
 </ion-view>

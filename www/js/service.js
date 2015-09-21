@@ -53,19 +53,18 @@ angular
 						$window.localStorage['pwd'] = pwd;
 						$rootScope.myPWD = $window.localStorage['pwd'];
 
-						if($window.localStorage['myId']==null) {
-
 						  var nickname = Strophe.getNodeFromJid(jid); 	
 						  
 						  User.get({nickname: nickname}, function(response) {
 
+						  		
 						  		$window.localStorage['myId']= response.user.pk_user;
 						  		console.log(response);
+						  		$state.go('app.home'); 
 						  		
 						  });
-						}
 
-						$state.go('app.home');  
+						 
 					  
 						
 					  self.addHandlers();
@@ -397,6 +396,8 @@ angular
 				connect.register.connect('klub.com', callback, 60, 1);
 				 
 			 }
+
+
 			
 	
  }

@@ -148,6 +148,9 @@ ion-content#iscritti .item-complex .item-content,
 ion-content#iscritti .item-radio .item-content {
   background-color: #fff; }
 
+ion-content#iscritti .list .item {
+  min-height: 78px;
+}
 
 /*MODAL ----------------------------------------------------*/
 

@@ -228,7 +228,7 @@ $scope.goToProfile = function(type, title, id){
 	  		$state.go('login');
 	  }
 })
-
+// #GTA# ANCH0R:SINGLE CHAT CONTROLLER ID:1442936222.782169
 .controller('ChatDetailsCtrl', function($scope, $rootScope, $state, $stateParams, Chats, $ionicScrollDelegate, $timeout, xmpp,  $ionicHistory) {
 
 	
@@ -460,27 +460,31 @@ $scope.goToProfile = function(type, title, id){
     name: 'Alessandro Lambiase',
     jid: 'alessandro',
     last_chat: 'Fortuna vitrea est; tum cum splendet, fru...',
-    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460',
+    likes: 15
   },  {
     id: 3,
     name: 'Giulia',
     jid: 'giulia',
 	type: 'single',
     last_chat: 'Fortuna vitrea est; tum cum splendet, fru...',
-    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460',
+    likes: 56
   }, {
     id: 1,
     name: 'Alessandro Lambiase',
     jid: 'alessandro',
     last_chat: 'Fortuna vitrea est; tum cum splendet, fru...',
-    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460',
+    likes: 22
   },  {
     id: 3,
     name: 'Giulia',
     jid: 'giulia',
 	type: 'single',
     last_chat: 'Fortuna vitrea est; tum cum splendet, fru...',
-    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460',
+    likes: 92
   }];
 	
 
@@ -552,8 +556,11 @@ $scope.goToProfile = function(type, title, id){
 	
 
 })
-
+// #GTA# ANCH0R:MULTI CHAT CONTROLLER ID:1442933800.828641
 .controller('MultiChatDetailsCtrl', function($scope, $rootScope, $state, $stateParams, Chats, $ionicScrollDelegate, $timeout, xmpp,  $ionicHistory) {
+
+
+
 
 	 console.log($stateParams.back_view);
 
@@ -567,9 +574,10 @@ $scope.goToProfile = function(type, title, id){
 	 //INITIALIZING DOM MODELS
 	 $scope.input = {};
 	 $scope.chat = {};
-	 $rootScope.messages[roomJid] = [];
+
 	 //GETTING MY JID FROM GLOBAL SCOPE
-	 xmpp.roomJid = roomJid;
+	 xmpp.setRoomJid(roomJid);
+	
 	 
 	 var timeoutPromise;
 
@@ -579,6 +587,12 @@ $scope.goToProfile = function(type, title, id){
 	 presence.c('x', {xmlns : 'http://jabber.org/protocol/muc#user'}, null); 
 	 xmpp.global_connect.send(presence.tree());
 
+	$scope.myGoBack = function() {
+    $ionicHistory.goBack();
+ //     presence= $pres({"to":completeJid + "/" + $rootScope.myJID, "nickname": $rootScope.myJID, 
+	// "type":"unavailable"}).c("x", {"xmlns": Strophe.NS.MUC}); 
+ //     xmpp.global_connect.send(presence.tree()); 
+  };
 	 
 	//GETTING THE 1TO1 ARRAY REFFERRING TO THE ACTUAL CONTACT THAT I'M CHATTING WITH 
 	$scope.getChatMessages = function (){ $scope.chat = $rootScope.messages[roomJid]; return $scope.chat;}
@@ -591,7 +605,7 @@ $scope.goToProfile = function(type, title, id){
 	   $scope.sendMessage = function() {
 			
 			if($scope.input.message.length){
-				
+					console.log("sending");
 					var sendMessageQuery = $msg({to: roomJid, type: 'groupchat'}).c('body').t($scope.input.message);
 					xmpp.global_connect.send(sendMessageQuery);
 					
@@ -601,6 +615,7 @@ $scope.goToProfile = function(type, title, id){
 					array.jid = myJID;
 					array.text = message_text;
 					
+
 					// $rootScope.messages[roomJid].push(array);
 					// $ionicScrollDelegate.scrollBottom(true);
 						

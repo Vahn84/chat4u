@@ -8,6 +8,15 @@ angular
 	var roomJid;
 	
         return {
+
+        	 getRoomJid:  function() {
+				return roomJid;
+			},
+
+			setRoomJid:  function(mucJid) {
+				roomJid = mucJid;
+				$rootScope.messages[roomJid] = [];
+			},
  
             auth: function(jid, pwd, sid, rid) {
 				self = this;
@@ -160,9 +169,134 @@ angular
  
     },
 
+     /*Function
+  Join a multi-user chat room
+  Parameters:
+  (String) room - The multi-user chat room to join.
+  (String) nick - The nickname to use in the chat room. Optional
+  (Function) msg_handler_cb - The function call to handle messages from the
+  specified chat room.
+  (Function) pres_handler_cb - The function call back to handle presence
+  in the chat room.
+  (String) password - The optional password to use. (password protected
+  rooms only)
+  */
+
+  join: function(room, nick, msg_handler_cb, pres_handler_cb, roster_cb, password, history_attrs) {
+    var msg, room_nick, _ref,
+      _this = this;
+    room_nick = this.test_append_nick(room, nick);
+    msg = $pres({
+      from: this._connection.jid,
+      to: room_nick
+    }).c("x", {
+      xmlns: Strophe.NS.MUC
+    });
+    if (history_attrs != null) {
+      msg = msg.c("history", history_attrs);
+    }
+    if (password != null) {
+      msg.cnode(Strophe.xmlElement("password", [], password));
+    }
+    if ((_ref = this._muc_handler) == null) {
+      this._muc_handler = this._connection.addHandler(function(stanza) {
+        var from, handler, handlers, id, roomname, x, xmlns, xquery, _i, _len;
+        from = stanza.getAttribute('from');
+        if (!from) {
+          return true;
+        }
+        roomname = from.split("/")[0];
+        if (!_this.rooms[roomname]) {
+          return true;
+        }
+        room = _this.rooms[roomname];
+        handlers = {};
+        if (stanza.nodeName === "message") {
+          handlers = room._message_handlers;
+        } else if (stanza.nodeName === "presence") {
+          xquery = stanza.getElementsByTagName("x");
+          if (xquery.length > 0) {
+            for (_i = 0, _len = xquery.length; _i < _len; _i++) {
+              x = xquery[_i];
+              xmlns = x.getAttribute("xmlns");
+              if (xmlns && xmlns.match(Strophe.NS.MUC)) {
+                handlers = room._presence_handlers;
+                break;
+              }
+            }
+          }
+        }
+        for (id in handlers) {
+          handler = handlers[id];
+          if (!handler(stanza, room)) {
+            delete handlers[id];
+          }
+        }
+        return true;
+      });
+    }
+    if (!this.rooms.hasOwnProperty(room)) {
+      this.rooms[room] = new XmppRoom(this, room, nick, password);
+      this.roomNames.push(room);
+    }
+    if (pres_handler_cb) {
+      this.rooms[room].addHandler('presence', pres_handler_cb);
+    }
+    if (msg_handler_cb) {
+      this.rooms[room].addHandler('message', msg_handler_cb);
+    }
+    if (roster_cb) {
+      this.rooms[room].addHandler('roster', roster_cb);
+    }
+    return this._connection.send(msg);
+  },
+  /*Function
+  Leave a multi-user chat room
+  Parameters:
+  (String) room - The multi-user chat room to leave.
+  (String) nick - The nick name used in the room.
+  (Function) handler_cb - Optional function to handle the successful leave.
+  (String) exit_msg - optional exit message.
+  Returns:
+  iqid - The unique id for the room leave.
+  */
+
+  leave: function(room, nick, handler_cb, exit_msg) {
+    var id, presence, presenceid, room_nick;
+    id = this.roomNames.indexOf(room);
+    delete this.rooms[room];
+    if (id >= 0) {
+      this.roomNames.splice(id, 1);
+      if (this.roomNames.length === 0) {
+        this._connection.deleteHandler(this._muc_handler);
+        this._muc_handler = null;
+      }
+    }
+    room_nick = this.test_append_nick(room, nick);
+    presenceid = this._connection.getUniqueId();
+    presence = $pres({
+      type: "unavailable",
+      id: presenceid,
+      from: this._connection.jid,
+      to: room_nick
+    });
+    if (exit_msg != null) {
+      presence.c("status", exit_msg);
+    }
+    if (handler_cb != null) {
+      this._connection.addHandler(handler_cb, null, "presence", null, presenceid);
+    }
+    this._connection.send(presence);
+    return presenceid;
+  },
+
+  test_append_nick: function(room, nick) {
+    return room + (nick != null ? "/" + (Strophe.escapeNode(nick)) : "");
+  },
+
 
     addHandlers: function() {
-
+    	var self = this;
     			   console.log("aggiungo gli handlers");
 
     			   connect.addHandler(on_presence, null, "presence");
@@ -269,9 +403,10 @@ angular
 					 array.name = sender.name;
 					 array.text = text;
 					 $rootScope.$apply(function() {
-					 
-					 $rootScope.messages[mucJid].push(array);
-					 console.log($rootScope.messages[mucJid]);
+					 console.log("mucJid "+self.getRoomJid());
+					
+					 $rootScope.messages[self.getRoomJid()].push(array);	
+					 console.log($rootScope.messages[self.getRoomJid()]);
 					 $ionicScrollDelegate.resize();
 					 $ionicScrollDelegate.scrollBottom(true);
 

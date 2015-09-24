@@ -191,6 +191,7 @@ Strophe.addConnectionPlugin('muc', {
     msg.c("x", {
       xmlns: "jabber:x:event"
     }).c("composing");
+    console.log(msg);
     this._connection.send(msg);
     return msgid;
   },

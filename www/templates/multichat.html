@@ -1,27 +1,24 @@
-
-
-
 <ion-view view-title="{{myTitle}}" class="light-grey-bg" id="chat_detail">
 
   <ion-nav-bar align-title="right" class="bar-custom">
    
-   <ion-nav-back-button class="bar-custom-color" >
+   <ion-nav-back-button class="bar-custom-color"ng-click="myGoBack()" >
       <i class="ion-ios-arrow-back" style="padding-left:8px"></i>
     </ion-nav-back-button>
       
       </ion-nav-bar>
 
-  <ion-content>
+  <ion-content> 
     <ion-list>
       <ion-item ng-repeat="chat in getChatMessages() track by $index" href="" style="padding-top:20px;">
 		<div class="">
         <img class="profile-pic" ng-class="(isOwnMessage(chat.jid)) ? 'pull-right' : 'pull-left'" 
 		ng-src="img/home/avatar.png"/>
-		<p class="chat_message" ng-class="(isOwnMessage(chat.jid)) ? 'pull-right text-right' : 'pull-left text-left'" >{{chat.text}}<br>
-		<small>{{isOwnMessage(chat.jid) == true && myContact.name || chat.name}}</small>
+		<p class="chat_message" ng-class="(isOwnMessage(chat.jid)) ? 'pull-right text-right' : 'pull-left text-left'"  >{{chat.text}}<br>
+    <small >{{chat.nickname}}</small> 
 		</p>
 		<div class="clearfix"></div>
-		
+		 
 		
 		</div>
       </ion-item>
@@ -30,7 +27,7 @@
   </ion-content>
   
   
-    <form name="sendMessageForm" ng-submit="sendMessage()" novalidate>
+    <form name="sendMessageForm" ng-submit="sendMessage()" novalidate accept-charset="UTF-8">
               <ion-footer-bar class="bar-stable item-input-inset message-footer" keyboard-attach>
                   <label class="item-input-wrapper">
                       <textarea style="width:100%; background:none;" ng-model="input.message" value="" placeholder="Scrivi un messaggio..." required minlength="1" maxlength="1500" ng-keydown="input.sendTyping()"></textarea>

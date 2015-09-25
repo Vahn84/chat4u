@@ -17,7 +17,22 @@ angular.module('starter', ['ionic', 'ionic-material', 'starter.controllers', 'st
       $window.localStorage['myLastKnownLongitude'] = 12.4964589;
  }
   
+$window.GcmPushPlugin.register(successHandler, errorHandler, {
+    "senderId":"745741646899",
+    "jsCallback":"onNotification"
+});
 
+function successHandler(result) {
+  console.log("Token: " + result.gcm);
+}
+
+function errorHandler(error) {
+  console.log("Error: " + error);
+}
+
+function onNotification(notification) {
+  console.log("Event Received: " + e); // { "extra": {"url" : "someurl.js" } } 
+}
  
 
 

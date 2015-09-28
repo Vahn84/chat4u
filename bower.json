@@ -5,6 +5,7 @@
     "ionic": "driftyco/ionic-bower#1.0.0"
   },
   "dependencies": {
-    "angular-ripple": "*"
+    "angular-ripple": "*",
+    "ion-autocomplete": "~0.3.0"
   }
 }

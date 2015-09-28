@@ -1,6 +1,6 @@
 angular
 .module('starter.services', [])
-.service('xmpp', function($rootScope, $state,  $ionicScrollDelegate, $window, User, broadcast, Chats ,$sce) {
+.service('xmpp', function($rootScope, $state,  $ionicScrollDelegate, $window, User, broadcast, Chats ,$sce, GCMRegistration) {
 
  var global_connect;
  var self = this;
@@ -51,6 +51,16 @@ auth: function(jid, pwd, sid, rid) {
 				User.get({nickname: nickname}, function(response) {
 					$window.localStorage['myId']= response.user.pk_user;
 					console.log(response);
+					var postGCM = {pk_user: response.user.pk_user, regid: $window.localStorage['gcmToken']};
+					
+					GCMRegistration.save({},postGCM, function(data) {
+						console.log(data);
+					},
+					function(data) {
+							console.log(data);
+					});
+
+
 					$state.go('app.home'); 
 				});
 
@@ -415,6 +425,14 @@ sendPing: function(jid){
 
 .factory('ListAroundMe', function($resource) {
 	return $resource('http://klipzapp.com/klub/v1/aroundme/:latitude/:longitude/:pk_user');
+})
+
+.factory('GCMRegistration', function($resource) {
+	return $resource('http://klipzapp.com/klub/v1/GCMRegistration');
+})
+
+.factory('GlobalSearch', function($resource) {
+	return $resource('http://klipzapp.com/klub/v1/search/:query');
 })
 
 

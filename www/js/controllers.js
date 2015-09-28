@@ -181,6 +181,10 @@ $scope.doLogin = function() {
 
 	};
 
+	$scope.search = function(){
+		console.log("open autocomplete");
+		$state.go('app.search');
+	}
 
 })
 
@@ -534,6 +538,38 @@ $scope.sendMessage = function() {
 .controller('EventiCtrl', function($scope, Chats, $state, $stateParams) {
 
 
+})	
+
+// #GTA# ANCH0R:CERCA CONTROLLER ID:1443434798.181882
+.controller('CercaCtrl', function($scope, GlobalSearch, $state, $stateParams, $timeout) {
+
+	$scope.search = {};
+	$scope.result = {};
+	var timeoutPromise;
+
+	$scope.goToProfile = function(type, title, id){
+		(type=="pagina") ? $state.go("app.vendorprofile", {titolo: title, uId: id}) : $state.go("app.userprofile", {titolo: title, contactId: id});
+	}
+
+		$scope.searchUsersAndPages = function(){
+
+				console.log("searching");
+				$scope.$apply(function() {
+					$scope.result.length = 0;
+				});
+				$timeout.cancel(timeoutPromise);
+
+				timeoutPromise = $timeout(function() {
+					
+						GlobalSearch.get({query:$scope.search.query}, function(response) {
+
+							console.log(response);
+							$scope.result = response.items;
+						})
+
+
+				}, 100);
+		}
 })	
 
 

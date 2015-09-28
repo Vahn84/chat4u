@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'ionic-material', 'starter.controllers', 'starter.services', 'ngCordova', 'ngResource'])
+angular.module('starter', ['ionic', 'ionic-material', 'starter.controllers', 'starter.services', 'ngCordova', 'ngResource', 'ion-autocomplete'])
 
 .run(function($ionicPlatform, $rootScope, $window, xmpp, UserLocation, Chats, $cordovaStatusbar) {
 
@@ -30,14 +30,28 @@ angular.module('starter', ['ionic', 'ionic-material', 'starter.controllers', 'st
   console.log("$rootScope.myJID",$rootScope.myJID);
 
 $ionicPlatform.ready(function() {
-
+var isAndroid = ionic.Platform.isAndroid();
+if(isAndroid){
   window.GcmPushPlugin.register(successHandler, errorHandler, {
       "senderId":"745741646899",
       "jsCallback":"onNotification"
   });
+  }
+
+  else {
+    window.GcmPushPlugin.register(successHandler, errorHandler, {
+    "badge":"true",
+    "sound":"true",
+    "alert":"true",
+    "usesGCM":true,
+    "sandbox":true,
+    "jsCallback":"onNotification"
+});
+  }
 
   function successHandler(result) {
     console.log("Token: " + result.gcm);
+     $window.localStorage['gcmToken'] = result.gcm;
   }
 
   function errorHandler(error) {
@@ -397,6 +411,16 @@ views: {
 }
 })  
 
+
+.state('app.search', {
+  url: "/search",
+views: {
+ 'singleContent': {
+  templateUrl: "templates/cerca.html",
+  controller: 'CercaCtrl'
+  }
+}
+})  
 
 
 .state('login', {
